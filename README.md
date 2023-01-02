@@ -1,5 +1,5 @@
 # HD OSD Font Tools
-A toolkit to manipulate HD OSD Fonts especially for HDZERO VRX and Goggles
+A toolkit for manipulating the HD OSD Fonts especially for HDZERO VRX and Goggles
 
 ## HDZERO HD OSD Font Example
 Variant for BTFL FC
