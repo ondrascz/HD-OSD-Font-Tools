@@ -73,6 +73,7 @@
   * [x] save Surface to BMP / PNG
   * [ ] open text file to read
   * [ ] parse MCM, draw font preview
+  * [x] ttf font rendering - outline without antialias, inside antialiased character
 * resource kit
   * [x] fix Pixlr template file
   * [x] example logos
