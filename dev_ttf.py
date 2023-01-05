@@ -4,25 +4,25 @@ from sys import exit
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((384,1152), pygame.SCALED)
+    screen = pygame.display.set_mode((384,400),pygame.SCALED)
     clock = pygame.time.Clock()
 
     screen.fill((127,127,127))
+
     bkg = pygame.image.load("resources/demo/bkg_001.jpg")
+    screen.blit(pygame.transform.smoothscale(bkg,(1280,720)),(-400,-300))
     
-    screen.blit(pygame.transform.smoothscale(bkg,(1280,720)),(-400,-200))
-    
-    # osd_font = pygame.font.Font("resources/ttf/A4SPEED.ttf", 25)
-    # osd_font = pygame.font.Font("resources/ttf/robotomonoextraligh.ttf", 26)
-    osd_font = pygame.font.Font("resources/ttf/hemi.ttf", 27)
-    # osd_font = pygame.font.Font("resources/ttf/AlfaSlabOne-Regular.ttf", 21)
-    # osd_font = pygame.font.Font("resources/ttf/Audiowide-Regular.ttf", 24)
+    # osd_font = pygame.font.Font("resources/ttf/A4SPEED.ttf", 47)
+    # osd_font = pygame.font.Font("resources/ttf/robotomonoextraligh.ttf", 52)
+    # osd_font = pygame.font.Font("resources/ttf/hemi.ttf", 54)
+    # osd_font = pygame.font.Font("resources/ttf/AlfaSlabOne-Regular.ttf", 42)
+    # osd_font = pygame.font.Font("resources/ttf/Audiowide-Regular.ttf", 46)
     # osd_font = pygame.font.Font("", 40)
-    # osd_font = pygame.font.Font("resources/ttf/DaysOne-Regular.ttf", 22)
-    # osd_font = pygame.font.Font("resources/ttf/Orbitron-ExtraBold.ttf", 21)
-    # osd_font = pygame.font.Font("resources/ttf/RussoOne-Regular.ttf", 28)
-    # osd_font = pygame.font.SysFont("Consolas", 30, True, True)
-    # osd_font = pygame.font.Font(None, 25)
+    osd_font = pygame.font.Font("resources/ttf/DaysOne-Regular.ttf", 44)
+    # osd_font = pygame.font.Font("resources/ttf/Orbitron-ExtraBold.ttf", 42)
+    # osd_font = pygame.font.Font("resources/ttf/RussoOne-Regular.ttf", 56)
+    # osd_font = pygame.font.SysFont("Consolas", 60)
+    # osd_font = pygame.font.Font(None, 70)
 
     glyph_x=0
     glyph_y=0
@@ -30,31 +30,42 @@ def main():
     for char in range(32,126):
         
     
-        glyph = pygame.Surface((24,36)).convert_alpha()
+        glyph = pygame.Surface((48,72)).convert_alpha()
         glyph.fill((0,0,0,0))
-        # glyph.fill((glyph_x*16,glyph_y*16+glyph_x*2,255-glyph_x*16))
+        # glyph.fill((glyph_x*16,glyph_y*16+glyph_x*2,255-glyph_x*16,128))
         
         osd_str = chr(char)
-        osd_text = osd_font.render(osd_str,True,(180,220,255))
+        osd_text = osd_font.render(osd_str,True,(200,200,255))
         osd_text_rect = osd_text.get_rect()
-        osd_outline = osd_font.render(osd_str,False,(0,0,0))
+        osd_outline = osd_font.render(osd_str,False,(64,64,128))
         osd_outline_rect = osd_outline.get_rect()
         
-        osd_text_rect.centerx = 12
-        osd_text_rect.centery = 18
-        
-        # blit not anti aliased outline
-        for x in range(-1,3):
-            for y in range(-1,3):
-                osd_outline_rect.centerx = 12 + x
-                osd_outline_rect.centery = 18 + y
+        # blit not anti aliased outline to glyph
+        for x in range(-3,4):
+            for y in range(-3,4):
+                osd_outline_rect.centerx = 24 + x
+                osd_outline_rect.centery = 36 + y
                 glyph.blit(osd_outline, osd_outline_rect)
 
-        # blit anti aliased character
+        # scale down the outline, blit to screen
+        screen.blit(
+            pygame.transform.scale(glyph,(glyph.get_size()[0]/2, glyph.get_size()[1]/2)),
+            (glyph_x*24,glyph_y*36)
+        )
+        
+        # blit anti aliased text to glyph
+        glyph.fill((0,0,0,0))
+        osd_text_rect.centerx = 24
+        osd_text_rect.centery = 36
         glyph.blit(osd_text, osd_text_rect)
+        
+        # scale down the text, blit to screen
+        screen.blit(
+            pygame.transform.smoothscale(glyph,(glyph.get_size()[0]/2, glyph.get_size()[1]/2)),
+            (glyph_x*24,glyph_y*36)
+        )
 
-        # blit of complete glyph to screen
-        screen.blit(glyph,(glyph_x*24,glyph_y*36))
+
 
         glyph_x += 1
         if glyph_x > 15:

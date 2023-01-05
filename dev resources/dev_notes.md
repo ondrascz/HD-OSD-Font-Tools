@@ -74,6 +74,7 @@
   * [ ] open text file to read
   * [ ] parse MCM, draw font preview
   * [x] ttf font rendering - outline without antialias, inside antialiased character
+  * [x] ttf font rendering - double size + smootscale a scale
 * resource kit
   * [x] fix Pixlr template file
   * [x] example logos
@@ -116,6 +117,40 @@
   * Nad obrazkovym pozadim
   * Nad chess boardem
   * Nad kombinaci
+
+### Command line concept
+
+switches:
+* -base
+  * base OSD font file to be opened and act as a source for manipulation
+  * can be image of different dimensions (autodetect what it might be)
+  * can be MCM
+* -blank
+  * blank OSD font (blank grey surface)
+* -logo
+  * image to be scaled and sliced as boot / arming logo
+* -numbers
+* -letters
+* -specials
+* -values
+* -units
+* -ahi
+* -compass
+* -battery
+  * OSD font file, the said part will be coppied a pasted to output font
+* -ttf
+  * .ttf font file for rendering all the characters
+  * size
+  * color, default (255,255,255)
+  * outline, default (0,0,0)
+  * outline_size, default ?
+* -ttfnumbers
+* -ttfletters
+* -ttfletterslow
+* -ttfspecials
+  * .ttf font files for rendering of a subset of characters
+* -o
+  * output OSD font file
 
 ### General
 
