@@ -1,5 +1,4 @@
 import pygame
-import sys
 from sys import exit
 
 def main():

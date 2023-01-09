@@ -71,10 +71,12 @@
       * [x] zkusit otevrit image s transparenci a bez a zkusit metodu get_flags()
       * [x] zkusit otevrit image s transparenci a vnutit mu color key
   * [x] save Surface to BMP / PNG
-  * [ ] open text file to read
-  * [ ] parse MCM, draw font preview
+  * [x] open text file to read
+  * [x] parse MCM
+    * [x] draw font preview
   * [x] ttf font rendering - outline without antialias, inside antialiased character
   * [x] ttf font rendering - double size + smootscale a scale
+  * [x] ttf font super sampling
 * resource kit
   * [x] fix Pixlr template file
   * [x] example logos
@@ -123,34 +125,53 @@
 switches:
 * -base
   * base OSD font file to be opened and act as a source for manipulation
-  * can be image of different dimensions (autodetect what it might be)
-  * can be MCM
-* -blank
-  * blank OSD font (blank grey surface)
-* -logo
-  * image to be scaled and sliced as boot / arming logo
-* -numbers
-* -letters
-* -specials
-* -values
-* -units
-* -ahi
-* -compass
-* -battery
-  * OSD font file, the said part will be coppied a pasted to output font
-* -ttf
-  * .ttf font file for rendering all the characters
-  * size
-  * color, default (255,255,255)
-  * outline, default (0,0,0)
-  * outline_size, default ?
-* -ttfnumbers
-* -ttfletters
-* -ttfletterslow
-* -ttfspecials
-  * .ttf font files for rendering of a subset of characters
-* -o
-  * output OSD font file
+  * input can be bitmap, mcm, ttf
+  * if argument is missing the blank base is used
+* font sub parts
+  * input can be:
+    * OSD font bitmap file
+      * file name
+    * MCM file
+      * file name
+      * glyph color (default white)
+      * outline color (default black)
+    * TTF file
+      * file name
+      * size
+      * glyph color (default white)
+      * outline color (default black)
+      * outline size (default 2)
+      * supersampling (default 4)
+  * the said subpart will be coppied a pasted to output font
+  * -logo
+    * boot / arm logo
+    * input can be bitmap
+  * -characters
+    * all characters
+    * input can be bitmap, mcm, ttf
+  * -numbers
+    * input can be bitmap, mcm, ttf
+  * -letters
+    * input can be bitmap, mcm, ttf
+  * -lowers
+    * input can be ttf
+  * -specials
+    * input can be bitmap, mcm, ttf
+  * -values
+    * input can be bitmap, mcm
+  * -units
+    * input can be bitmap, mcm
+  * -ahi
+    * input can be bitmap, mcm
+  * -compass
+    * input can be bitmap, mcm
+  * -battery
+    * input can be bitmap, mcm
+  * -o
+    * output OSD font bitmap file
+  * if argument is missing only the preview is shown
+* -nopreview
+  * don't show font preview
 
 ### General
 
