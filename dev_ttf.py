@@ -4,20 +4,20 @@ from sys import exit
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((384,400), pygame.SCALED)
+    screen = pygame.display.set_mode((384,1152), pygame.SCALED)
     clock = pygame.time.Clock()
 
     screen.fill((127,127,127))
 
     bkg = pygame.image.load("resources/demo/bkg_001.jpg")
-    screen.blit(pygame.transform.smoothscale(bkg,(1280,720)),(-400,-300))
+    # screen.blit(pygame.transform.smoothscale(bkg,(1280,720)),(-400,-300))
     
     ttf_super_sampling = 6
-    ttf_outline_thickness = 1.2
-    ttf_vertical_stretch = 0.8
+    ttf_outline_thickness = 1.5
+    ttf_vertical_stretch = 1
 
     # osd_font = pygame.font.Font("resources/ttf/A4SPEED.ttf", 45)
-    osd_font = pygame.font.Font("resources/ttf/robotomonoextraligh.ttf", 45 * ttf_super_sampling)
+    # osd_font = pygame.font.Font("resources/ttf/robotomonoextraligh.ttf", 45 * ttf_super_sampling)
     # osd_font = pygame.font.Font("resources/ttf/hemi.ttf", 27 * ttf_super_sampling)
     # osd_font = pygame.font.Font("resources/ttf/AlfaSlabOne-Regular.ttf", 21 * ttf_super_sampling)
     # osd_font = pygame.font.Font("resources/ttf/Audiowide-Regular.ttf", 26  * ttf_super_sampling)
@@ -27,11 +27,12 @@ def main():
     # osd_font = pygame.font.Font("resources/ttf/RussoOne-Regular.ttf", 28 * ttf_super_sampling)
     # osd_font = pygame.font.SysFont("Consolas", 30 * ttf_super_sampling)
     # osd_font = pygame.font.Font(None, 55 * ttf_super_sampling)
+    osd_font = pygame.font.Font("resources/ttf/thundernovaspacedital.ttf", 40 * ttf_super_sampling)
 
     glyph_x=0
-    glyph_y=0
+    glyph_y=2
     
-    for char in range(32,126):
+    for char in range(32,96):
         
     
         glyph = pygame.Surface((24 * ttf_super_sampling, 36 * ttf_super_sampling  / ttf_vertical_stretch)).convert_alpha()
@@ -48,7 +49,7 @@ def main():
         for x in range(int(-ttf_outline_thickness * ttf_super_sampling) , int(ttf_outline_thickness * ttf_super_sampling) + 1):
             for y in range(int(-ttf_outline_thickness * ttf_super_sampling / ttf_vertical_stretch) ,int(ttf_outline_thickness * ttf_super_sampling / ttf_vertical_stretch) + 1):
                 osd_outline_rect.centerx = 12 * ttf_super_sampling + x
-                osd_outline_rect.centery = 18 * ttf_super_sampling + y
+                osd_outline_rect.centery = 18 * ttf_super_sampling / ttf_vertical_stretch + y
                 glyph.blit(osd_outline, osd_outline_rect)
 
         # scale down the outline, blit to screen
@@ -60,7 +61,7 @@ def main():
         # blit anti aliased text to glyph
         glyph.fill((0,0,0,0))
         osd_text_rect.centerx = 12 * ttf_super_sampling
-        osd_text_rect.centery = 18 * ttf_super_sampling
+        osd_text_rect.centery = 18 * ttf_super_sampling / ttf_vertical_stretch
         glyph.blit(osd_text, osd_text_rect)
         
         # scale down the text, blit to screen
@@ -77,7 +78,8 @@ def main():
             glyph_y += 1
 
     
-
+    pygame.image.save(screen, "out/out.bmp")
+    
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

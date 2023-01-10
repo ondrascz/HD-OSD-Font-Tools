@@ -90,6 +90,8 @@
 
 ## Ideas
 
+* "minilogo" as craftname
+  * ? which characters?
 * Detect what the input files are
   * according to extension
     * is it image of allowed formats?
@@ -97,16 +99,7 @@
     * is it MCM?
 * Kopirovani glyphu z velke bitmapy pres Surface blit
 * kazdy glyph je mala surfcace
-* object Font
-  * volitelny rozmer glyphu
-  * volitelny rastr fontu
-  * Font obsahuje 2D pole glyphu ? Nebo jen celou surface s metodami na vraceni glyphu a loga
-  * Font metoda na vraceni Surface glyphu
-  * Font metoda na vraceni Surface fontu
-  * Font metoda na vraceni Surface loga
-  * Font metoda ulozeni bitmapy fontu do souboru, volitelny spacing
-  * Font metoda ulozrni bitmapy loga
-  * Font init, volitelne na vstupu pripravena Surface, pak rozpad do glyphu
+
 * Vyroba font Surface z:
   * image, detekce rozmeru (normal, exploded, analog bitmapa)
   * mcm
@@ -166,6 +159,8 @@ switches:
   * -compass
     * input can be bitmap, mcm
   * -battery
+    * input can be bitmap, mcm
+  * -arrow
     * input can be bitmap, mcm
   * -o
     * output OSD font bitmap file
