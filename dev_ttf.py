@@ -2,6 +2,47 @@ import pygame
 import sys
 from sys import exit
 
+DEBUG = True
+
+def explode_font_surf(
+    font_surf: pygame.Surface,
+    glyph_size = (24, 36),
+    gap_size = 6,
+    outline = True,
+):
+    # calculate font grid size
+    font_grid_size = (int(font_surf.get_width() / glyph_size[0]) , int(font_surf.get_height() / glyph_size[1]))
+
+    if DEBUG:
+        print("Grid size: " + str(font_grid_size))
+
+    # prepare target surface
+    exploded_font_surf = pygame.Surface(
+        (
+            gap_size * (font_grid_size[0] + 1) + font_surf.get_width(),
+            gap_size * (font_grid_size[1] + 1) + font_surf.get_height(),
+        )
+    )
+    exploded_font_surf.fill((0,0,0))
+
+    if DEBUG:
+        print("Exploded grid size: " + str(exploded_font_surf.get_size()))
+
+    # iterate over glyphs and copy them to target surface
+    for x in range(0,font_grid_size[0]):
+        for y in range(0,font_grid_size[1]):
+            exploded_font_surf.blit(
+                font_surf,
+                ( x * (glyph_size[0] + gap_size) + gap_size, y * (glyph_size[1] + gap_size) + gap_size ),
+                pygame.Rect(x * glyph_size[0] , y * glyph_size[1], glyph_size[0], glyph_size[1])
+
+            )
+
+    # return exploded surface
+    return exploded_font_surf
+
+
+
 def main():
     pygame.init()
     screen = pygame.display.set_mode((384,1152), pygame.SCALED)
@@ -13,21 +54,21 @@ def main():
     # screen.blit(pygame.transform.smoothscale(bkg,(1280,720)),(-400,-300))
     
     ttf_super_sampling = 6
-    ttf_outline_thickness = 1.5
+    ttf_outline_thickness = 1.2
     ttf_vertical_stretch = 1
 
     # osd_font = pygame.font.Font("resources/ttf/A4SPEED.ttf", 45)
     # osd_font = pygame.font.Font("resources/ttf/robotomonoextraligh.ttf", 45 * ttf_super_sampling)
-    # osd_font = pygame.font.Font("resources/ttf/hemi.ttf", 27 * ttf_super_sampling)
+    # osd_font = pygame.font.Font("resources/ttf/hemi.ttf", 21 * ttf_super_sampling)
     # osd_font = pygame.font.Font("resources/ttf/AlfaSlabOne-Regular.ttf", 21 * ttf_super_sampling)
     # osd_font = pygame.font.Font("resources/ttf/Audiowide-Regular.ttf", 26  * ttf_super_sampling)
     # osd_font = pygame.font.Font("", 40)
     # osd_font = pygame.font.Font("resources/ttf/DaysOne-Regular.ttf", 23 * ttf_super_sampling)
     # osd_font = pygame.font.Font("resources/ttf/Orbitron-ExtraBold.ttf", 24 * ttf_super_sampling)
     # osd_font = pygame.font.Font("resources/ttf/RussoOne-Regular.ttf", 28 * ttf_super_sampling)
-    # osd_font = pygame.font.SysFont("Consolas", 30 * ttf_super_sampling)
-    # osd_font = pygame.font.Font(None, 55 * ttf_super_sampling)
-    osd_font = pygame.font.Font("resources/ttf/thundernovaspacedital.ttf", 40 * ttf_super_sampling)
+    # osd_font = pygame.font.SysFont("Consolas", 45 * ttf_super_sampling)
+    osd_font = pygame.font.Font(None, 55 * ttf_super_sampling)
+    
 
     glyph_x=0
     glyph_y=2
@@ -70,15 +111,15 @@ def main():
             (glyph_x*24,glyph_y*36)
         )
 
-
-
         glyph_x += 1
         if glyph_x > 15:
             glyph_x = 0
             glyph_y += 1
 
     
-    pygame.image.save(screen, "out/out.bmp")
+    
+    
+    pygame.image.save(explode_font_surf(screen), "out/out.bmp")
     
     while True:
         for event in pygame.event.get():

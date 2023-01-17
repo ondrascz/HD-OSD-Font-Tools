@@ -33,6 +33,12 @@
 * HDZ VRX font
   * github: https://github.com/hd-zero/hdzero-osd-font-library
 
+* WTOFS / WS
+  * https://github.com/fpv-wtf/msp-osd
+  * https://github.com/Knifa/mcm2img
+  * https://github.com/Knifa/material-osd
+  * WS je nudle o siri 24px nebo 36px
+
 ## HDZERO HD OSD Font Properties
 
 * glyph dimensions: 24x36

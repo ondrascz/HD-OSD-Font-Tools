@@ -1,7 +1,7 @@
 import pygame
 import sys
 
-# generals settings
+# general settings
 DEBUG = True
 
 # HD OSD fonts settings
@@ -76,25 +76,23 @@ def main():
     pygame.init()
     
     # === parse CLI arguments ===
-
     cli_parsed_args = parse_cli_args()
-    print(cli_parsed_args)
 
     # === check input files ===
-
     for switch, values in cli_parsed_args:
         print(switch, values)
         print(str(values[0]) + " must be existing file")
     
+    # === open file and render to source surface ===
+    
+    # === prepare target surface ===
     
     # === init a pygame screen ===
-
     screen = pygame.display.set_mode((GLYPH_SIZE[0] * FONT_GRID_SIZE[0], GLYPH_SIZE[1] * FONT_GRID_SIZE[1]), pygame.SCALED)
     pygame.display.set_caption("Font Builder Preview (click to close)")
     clock = pygame.time.Clock()
 
     # === pygame loop ===
-
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
