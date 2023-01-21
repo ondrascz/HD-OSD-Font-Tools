@@ -8,10 +8,10 @@ command line...
 
 ### Command line switches and values
 
-| switch | value |note
-| ------ | ------- |-|
-| -base  |file name|The other values are dependent on the file type|
-| -base  |file name|The other values are dependent on the file type|
+| switch | value     | note                                            |
+| ------ | --------- | ----------------------------------------------- |
+| -base  | file name | The other values are dependent on the file type |
+| -base  | file name | The other values are dependent on the file type |
 
 
 
