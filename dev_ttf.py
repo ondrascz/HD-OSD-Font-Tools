@@ -66,10 +66,9 @@ def main():
 
     # osd_font = pygame.font.Font("resources/ttf/A4SPEED.ttf", 45)
     # osd_font = pygame.font.Font("resources/ttf/robotomonoextraligh.ttf", 30 * ttf_super_sampling)
-    # osd_font = pygame.font.Font("resources/ttf/hemi.ttf", 21 * ttf_super_sampling)
+    osd_font = pygame.font.Font("resources/ttf/hemi.ttf", 21 * ttf_super_sampling)
     # osd_font = pygame.font.Font("resources/ttf/AlfaSlabOne-Regular.ttf", 21 * ttf_super_sampling)
-    osd_font = pygame.font.Font("resources/ttf/Audiowide-Regular.ttf", 26  * ttf_super_sampling)
-    # osd_font = pygame.font.Font("", 40)
+    # osd_font = pygame.font.Font("resources/ttf/Audiowide-Regular.ttf", 20  * ttf_super_sampling)
     # osd_font = pygame.font.Font("resources/ttf/DaysOne-Regular.ttf", 23 * ttf_super_sampling)
     # osd_font = pygame.font.Font("resources/ttf/Orbitron-ExtraBold.ttf", 24 * ttf_super_sampling)
     # osd_font = pygame.font.Font("resources/ttf/RussoOne-Regular.ttf", 28 * ttf_super_sampling)

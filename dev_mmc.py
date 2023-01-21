@@ -13,13 +13,13 @@ def main():
     COLOR_WHITE = (255,255,255)
 
     # surfaces to operate glyphs and font
-    glyph_surf = pygame.Surface(GLYPH_SIZE)
     glyph_mcm_surf = pygame.Surface(GLYPH_MCM_SIZE)
-    font_surt = pygame.Surface(( GLYPH_SIZE[0] * FONT_GRID_SIZE[0] , GLYPH_SIZE[1] * FONT_GRID_SIZE[1] ))
+    font_surf = pygame.Surface(( GLYPH_SIZE[0] * FONT_GRID_SIZE[0] , GLYPH_SIZE[1] * FONT_GRID_SIZE[1] ))
+    font_surf.fill( COLOR_TRANSPARENT )
     font_glyph_pos = [0,0]
     
     # open MCM file
-    mcm_file = open("resources/fonts/INAV_analog_default.mcm", "r")
+    mcm_file = open("resources/fonts/BTFL_analog_default.mcm", "r")
 
     # read the mcm file into an array
     mcm_content = mcm_file.read().splitlines()
@@ -71,7 +71,7 @@ def main():
         font_glyph_pos[1] = int(font_glyph_code / FONT_GRID_SIZE[0])
         font_glyph_pos[0] = (font_glyph_code - font_glyph_pos[1] * FONT_GRID_SIZE[0])
         
-        font_surt.blit( pygame.transform.scale(glyph_mcm_surf,GLYPH_SIZE), ( font_glyph_pos[0] * GLYPH_SIZE[0] , font_glyph_pos[1] * GLYPH_SIZE[1] ) )
+        font_surf.blit( pygame.transform.scale(glyph_mcm_surf,GLYPH_SIZE), ( font_glyph_pos[0] * GLYPH_SIZE[0] , font_glyph_pos[1] * GLYPH_SIZE[1] ) )
         # print("code: " + str(font_glyph_code) + " -> col: " + str(font_glyph_pos[0]) + " -> row: " + str(font_glyph_pos[1]) )
         # print( font_glyph_pos[0] * GLYPH_SIZE[0] , font_glyph_pos[1] * GLYPH_SIZE[1] )
 
@@ -81,7 +81,7 @@ def main():
     clock = pygame.time.Clock()
     
     screen.fill((255,0,255))
-    screen.blit(font_surt, (0,0))
+    screen.blit(font_surf, (0,0))
 
     while True:
         for event in pygame.event.get():
