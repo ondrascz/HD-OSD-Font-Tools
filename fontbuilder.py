@@ -43,13 +43,13 @@ def main():
 
     
 
-    # process the file
-    # guess what type of file it is
-    # open file and render to source surface
-    
+
+    # for bitmap file - guess what type of file it is
+       
     
     
     # prepare target surface
+    # copy input surfaces (or its parts) to target surface
     
     # init a pygame screen
     pygame.init()
