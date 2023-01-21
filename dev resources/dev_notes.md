@@ -98,6 +98,7 @@
 
 * "minilogo" as craftname
   * ? which characters?
+  * "[\\]^_" 120x36px
 * Detect what the input files are
   * according to extension
     * is it image of allowed formats?
@@ -141,35 +142,41 @@ switches:
       * outline color (default black)
       * outline size (default 2)
       * supersampling (default 4)
+    * generic bitmap
+      * typically for logo / minilogo usage
   * the said subpart will be coppied a pasted to output font
-  * -logo
+  * -btfllogo
     * boot / arm logo
-    * input can be bitmap
-  * -characters
+    * input can be bitmap, mcm, generic bitmap
+  * -btflcharacters
     * all characters
     * input can be bitmap, mcm, ttf
-  * -numbers
+  * -btflnumbers
     * input can be bitmap, mcm, ttf
-  * -letters
+  * -btflletters
     * input can be bitmap, mcm, ttf
-  * -lowers
+  * -btfllowletters
     * input can be ttf
-  * -specials
+  * -btflspecials
     * input can be bitmap, mcm, ttf
-  * -values
+  * -btflvalues
     * input can be bitmap, mcm
-  * -units
+  * -btflunits
     * input can be bitmap, mcm
-  * -ahi
+  * -btflahi
     * input can be bitmap, mcm
-  * -compass
+  * -btflcompass
     * input can be bitmap, mcm
-  * -battery
+  * -btflbattery
     * input can be bitmap, mcm
-  * -arrow
+  * -btflarrow
     * input can be bitmap, mcm
-  * -o
-    * output OSD font bitmap file
+  * -btflframe
+    * input can be bitmap, mcm
+  * -btflminilogo
+    * input can be bitmap, generic bitmap
+* -o
+  * output OSD font bitmap file
   * if argument is missing only the preview is shown
 * -nopreview
   * don't show font preview

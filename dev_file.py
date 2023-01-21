@@ -3,6 +3,6 @@
 from os import path
 
 
-filename = "dev resources/pokusny soubor s mezerami v nazvu.txt"
+filename = "dev resources/pokusny soubor s mcezerami v nazvu.txt"
 
-print(path.exists(filename))
+print(path.isfile(filename))
