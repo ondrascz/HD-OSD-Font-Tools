@@ -10,7 +10,7 @@
     * dimmension: 120x72 -> 10x4 glyphs
     * glyphs: 257-296
 
-* BF analog
+* BTFL analog
   * github: https://github.com/iNavFlight/inav-configurator/tree/master/resources/osd/analogue
   * glyph dimensions: 12x18
   * bitmap dimensions: 207x303 = 192 + 15 1px dividers x 288 + 15 1px dividers
@@ -46,24 +46,27 @@
   * 384x1152
   * 486x1350 ->  384 + 17 6px dividers x 1152 + 33 6px dividers
 * bitmap raster: 16x32 glyphs
-* BF
-  * characters
-  * glyphs
-  * logo
-    * dimmension: 576x144 -> 24x4 glyphs
-    * transparency: color (127,127,127)
-    * glyphs: 160-255
-  * units
-  * variables
-  * numbers
-  * letters
-  * special characters
-  * ...
-* INAV
-  * logo
-    * dimmension: 240x144 -> 10x4 glyphs
-    * transparency: color (127,127,127)
-    * glyphs: 257-296
+
+### BFTLF 
+
+* characters
+* glyphs
+* logo
+  * dimmension: 576x144 -> 24x4 glyphs
+  * transparency: color (127,127,127)
+  * glyphs: 160-255
+* units
+* variables
+* numbers
+* letters
+* special characters
+
+### INAV
+
+* logo
+  * dimmension: 240x144 -> 10x4 glyphs
+  * transparency: color (127,127,127)
+  * glyphs: 257-296
 
 ## TODOs
 
@@ -89,8 +92,8 @@
   * [x] example fonts
   * [ ] example font parts
 * Opening input file(s)
-  * [ ] input file as argument
-  * [ ] check if file exists
+  * [x] input file as argument
+  * [x] check if file exists
   * [ ] image / mcm ?
   * [ ] guess format
 
@@ -104,21 +107,14 @@
     * is it image of allowed formats?
       * does it have known dimensions? -> assume what is it
     * is it MCM?
-* Kopirovani glyphu z velke bitmapy pres Surface blit
-* kazdy glyph je mala surfcace
-
-* Vyroba font Surface z:
-  * image, detekce rozmeru (normal, exploded, analog bitmapa)
-  * mcm
-* Import loga
-  * resize pokud potreba
-  * detekce "zelene" bitmapy pro analog logo. Nastaveni transparence a double size
-  * logo bf, inav (varianty)
-* Presety na kopirovani glyphu z fontu do fontu
-* * demo fontu, staticke a dynamicke 
-  * Nad obrazkovym pozadim
-  * Nad chess boardem
-  * Nad kombinaci
+* Logo
+  * detect known format (analog OSD font logo for BTFL, for INAV?)
+  * smart resize of the source
+  * render to glyphs as BTFL or INAV logo
+* Font demo
+  * real life background
+  * chess board background
+  * both
 
 ### Command line concept
 
@@ -180,10 +176,6 @@ switches:
   * if argument is missing only the preview is shown
 * -nopreview
   * don't show font preview
-
-### General
-
-* ? Python own private modules for different projects
 
 ## Tests
 
