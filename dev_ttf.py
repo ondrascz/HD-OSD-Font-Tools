@@ -84,7 +84,7 @@ def main():
     GLYPH_SUBSET_BTFLNUMBERS = [*range(48,58)]
 
     GLYPH_SUBSET_BTFL_LOWLETTERS = [*range(97,123)]
-    # GLYPH_SUBSET_BTFL_LOWLETTERS_OFFSET = -32
+    GLYPH_SUBSET_BTFL_LOWLETTERS_OFFSET = -32
 
     GLYPH_SUBSET_BTFL_SPECIALS = [*range(32,36)]
     GLYPH_SUBSET_BTFL_SPECIALS.extend( [*range(37,48)] )
@@ -92,8 +92,7 @@ def main():
     GLYPH_SUBSET_BTFL_SPECIALS.extend( [*range(91,96)] )
     GLYPH_SUBSET_BTFL_SPECIALS.append( 124 )    
 
-    glyph_x=0
-    glyph_y=2
+
     glyph_offset = 0
 
     ttf_chars_to_render = GLYPH_SUBSET_BTFL_CHARACTERS

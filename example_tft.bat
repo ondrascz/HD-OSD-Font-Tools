@@ -1,1 +1,1 @@
-py fontbuilder.py resources\ttf\hemi.ttf 21 #FFFFFF 
+py fontbuilder.py resources/ttf/hemi.ttf 20 1.3 1.5 #FFFF88

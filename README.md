@@ -11,7 +11,7 @@ The source can be:
 - HDZERO OSD font (.bmp)
 - true type font file (.ttf)
 - Analog OSD font file (.mcm)
-- Analog OSD font file preview (.png / .bmp)
+- Analog OSD font preview file (.png / .bmp)
 - Generic bitmap, typically containing a logo (.png / .bmp / .jpg)
 
 The source can be used as a part of the built font such as:
@@ -26,23 +26,26 @@ The source can be used as a part of the built font such as:
 - home arrow
 - etc.
 
+
+
 ### Command line switches and values
 
-| switch | 1st value | additional values | source glyphs | valid source files        | note                                                      |
+
+| switch | primary value | additional values | source glyphs | valid source files        | note                                                      |
 | ------ | --------- | ----------------- | ------------- | ------------------------- | --------------------------------------------------------- |
-| -base  | file name |                   | all           | .bmp / .png / .ttf / .mmc | base font source. Can be used without the `-base` switch. |
+| -base  | file name |                   | all           | .bmp .png .ttf .mmc | base font source. Can be used without the `-base` switch. |
 |        | file name |                   |               |
 
 
 ### Usage Examples
 
-- Open .mcm font file and save as .bmp HDZERO HD OSD font
+1. Open .mcm font file and save as .bmp HDZERO HD OSD font
 
 ```
 py fontbuilder.py -base resources/fonts/BTFL_analog_default.mcm -o BTFL_default.bmp
 ```
 
-- following example will produce the same results. The switch `-base` can be left off
+2. following example will produce the same results. The switch `-base` can be left off
 
 ```
 py fontbuilder.py resources/fonts/BTFL_analog_default.mcm -o BTFL_default.bmp
