@@ -12,7 +12,16 @@ GLYPH_SIZE = (24, 36)
 GLYPH_MCM_SIZE = (12, 18)
 FONT_GRID_SIZE = (16, 32)
 
+# colors
+COLOR_TRANSPARENT = (127,127,127)
+COLOR_BLACK = (0,0,0)
+COLOR_WHITE = (255,255,255)
+COLOR_TTF_GLYPH = (255,255,255)
+COLOR_TTF_OUTLINE = (0,0,0)
+
 # glyphs sets definitions
+# all glyphs
+GLYPH_SUBSET_ALL = [*range(0,512)]
 
 # all characters (letters, numbers, special characters)
 GLYPH_SUBSET_BTFL_CHARACTERS = [*range(32,36)]
@@ -36,19 +45,28 @@ GLYPH_SUBSET_BTFL_SPECIALS.extend( [*range(58,65)] )
 GLYPH_SUBSET_BTFL_SPECIALS.extend( [*range(91,96)] )
 GLYPH_SUBSET_BTFL_SPECIALS.append( 124 ) 
 
-# colors
-COLOR_TRANSPARENT = (127,127,127)
-COLOR_BLACK = (0,0,0)
-COLOR_WHITE = (255,255,255)
-COLOR_TTF_GLYPH = (255,255,255)
-COLOR_TTF_OUTLINE = (0,0,0)
-
 # arguments parsing
-SWITCHES_FILE = ("", "base")
+SWITCHES_FILE = ("", "base", "btflcharacters", "btfllowletters" , "btflspecials" , "btflnumbers" )
 SWITCHES_NOFILE = ("o", "nopreview", "demo")
 
 # supported files extensions
 FILE_INPUT_EXTENSIONS = ("ttf", "mcm", "bmp", "png")
+
+# switch - extension - subset matrix
+SWITCH_EXT_SUBSET_OFFSET_MATRIX = [
+    ["base" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_ALL , 0 ],
+    ["base" , ["ttf"] , GLYPH_SUBSET_BTFL_CHARACTERS , 0 ],
+    ["" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_ALL , 0 ],
+    ["" , ["ttf"] , GLYPH_SUBSET_BTFL_CHARACTERS , 0 ],
+
+    ["btflcharacters" , ["ttf", "mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_CHARACTERS , 0 ],
+    ["btflspecials" , ["ttf", "mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_SPECIALS , 0 ],
+    ["btflnumbers" , ["ttf", "mcm", "bmp", "png"] , GLYPH_SUBSET_BTFLNUMBERS , 0 ],
+
+    ["btfllowletters" , ["ttf"] , GLYPH_SUBSET_BTFL_LOWLETTERS , GLYPH_SUBSET_BTFL_LOWLETTERS_OFFSET ],
+
+    
+]
 
 # main program
 def main():
@@ -68,31 +86,60 @@ def main():
     valid_args = validate_args( cli_parsed_args )
     
     # process the valid input files and create the input font surfaces
-    input_font_surfaces = []
+    source_font_surfaces = []
     for switch, values in valid_args:
         
         # the input file is .MCM analog OSD font
         if switch in SWITCHES_FILE and path.splitext(values[0])[1][1:].lower() == "mcm":
-            input_font_surfaces.append( load_mcm( *values ) )
+            source_font_surfaces.append( load_mcm( *values ) )
 
         # the input file is .TTF font
         if switch in SWITCHES_FILE and path.splitext(values[0])[1][1:].lower() == "ttf":
-            input_font_surfaces.append( load_ttf( *values ) )
+            source_font_surfaces.append( load_ttf( *values, chars_to_render=range(32,123) ) )
 
-    
+        # the input file is bitmap
+        # for bitmap file - guess what type of file it is
 
-
-    # for bitmap file - guess what type of file it is
-       
-    
-    
     # prepare target surface
+    target_surf = pygame.Surface((GLYPH_SIZE[0] * FONT_GRID_SIZE[0], GLYPH_SIZE[1] * FONT_GRID_SIZE[1]))
+    target_surf.fill(COLOR_TRANSPARENT)
+    
+    # process the source surfaces
+    if DEBUG: print("[DEBUG] Source surfaces processor:")
+    if DEBUG: print("[DEBUG] ")
+    
+    for source_nr, source_surf in enumerate( source_font_surfaces ):
+        
+        source_switch = str(valid_args[source_nr][0])
+        source_ext = path.splitext(valid_args[source_nr][1][0])[1][1:].lower()
+        
+        if DEBUG: print("[DEBUG] Source nr. " + str(source_nr) + ": " + str(source_surf) + ", Switch: \"" + source_switch + "\", Source file extension: \"" + source_ext + "\"")
+
+        # get the glyphs subset according to a switch and file extension
+        for switch_matrix in SWITCH_EXT_SUBSET_OFFSET_MATRIX:
+            
+            # the source switch match the source file extension
+            if switch_matrix[0] == source_switch and source_ext in switch_matrix[1]:
+                 
+                 if DEBUG: print("[DEBUG] Switch / extension combination is valid")
+
+                 # copy the glyphs from the source to the target surface
+                 for glyph in switch_matrix[2]:
+                    copy_glyph( glyph, source_surf , target_surf , switch_matrix[3])
+
+
+
+
+    
+    if DEBUG: print("[DEBUG] ----")
+    
+    
     # copy input surfaces (or its parts) to target surface
     
     
 
     
-    screen.blit(input_font_surfaces[0],(0,0))
+    screen.blit(target_surf,(0,0))
     
     # pygame loop
     while True:
@@ -122,7 +169,11 @@ def load_bitmap():
     pass
 
 # load and process MCM font file
-def load_mcm( filename ):
+def load_mcm(
+    filename,
+    mcm_glyph_color = COLOR_WHITE,
+    mcm_outline_color = COLOR_BLACK,
+):
     
     if DEBUG: print("[DEBUG] MCM font loader:")
     if DEBUG: print("[DEBUG]")
@@ -168,11 +219,11 @@ def load_mcm( filename ):
                 for i in range(0,8,2):
                     if glyph_mcm_byte[i:i+2] == "00":
                         # black pixel
-                        glyph_mcm_surf.set_at(glyph_px_pos, COLOR_BLACK)
+                        glyph_mcm_surf.set_at(glyph_px_pos, mcm_outline_color)
                         pixels += ".."
                     elif glyph_mcm_byte[i:i+2] == "10":
-                        # black pixel
-                        glyph_mcm_surf.set_at(glyph_px_pos, COLOR_WHITE)
+                        # white pixel
+                        glyph_mcm_surf.set_at(glyph_px_pos, mcm_glyph_color)
                         pixels += "XX"
                     else:
                         # transparent pixel
@@ -246,7 +297,7 @@ def load_ttf(
                 osd_outline_rect.centery = GLYPH_SIZE[1]/2 * ttf_super_sampling / ttf_vertical_stretch + y
                 glyph_ttf_surf.blit(osd_outline, osd_outline_rect)
 
-        # scale down the outline, blit to screen
+        # scale down the outline, blit to font surface
         font_surf.blit(
             pygame.transform.scale(glyph_ttf_surf,(glyph_ttf_surf.get_size()[0]/ttf_super_sampling, glyph_ttf_surf.get_size()[1]/ttf_super_sampling * ttf_vertical_stretch)),
             (glyph_x*GLYPH_SIZE[0],glyph_y*GLYPH_SIZE[1])
@@ -258,7 +309,7 @@ def load_ttf(
         osd_glyph_rect.centery = GLYPH_SIZE[1]/2 * ttf_super_sampling / ttf_vertical_stretch
         glyph_ttf_surf.blit(osd_glyph, osd_glyph_rect)
         
-        # scale down the glyph, blit to screen
+        # scale down the glyph, blit to font surface
         font_surf.blit(
             pygame.transform.smoothscale(glyph_ttf_surf,(glyph_ttf_surf.get_size()[0]/ttf_super_sampling, glyph_ttf_surf.get_size()[1]/ttf_super_sampling * ttf_vertical_stretch)),
             (glyph_x*GLYPH_SIZE[0],glyph_y*GLYPH_SIZE[1])
@@ -421,6 +472,27 @@ def explode_font_surf(
 
     # return exploded surface
     return exploded_font_surf
+
+# copy glyph from source surface to target surface
+def copy_glyph(
+    glyph,
+    source_surf :pygame.Surface,
+    target_surf :pygame.Surface,
+    glyph_offset = 0
+):
+    
+    # calculate source glyph coordinates
+    source_glyph_y= floor( (glyph) / FONT_GRID_SIZE[0] )
+    source_glyph_x=(glyph) - source_glyph_y * FONT_GRID_SIZE[0]
+    
+    # calculate target glyph coordinates
+    target_glyph_y= floor( (glyph+glyph_offset) / FONT_GRID_SIZE[0] )
+    target_glyph_x=(glyph+glyph_offset) - target_glyph_y * FONT_GRID_SIZE[0]
+
+    if DEBUG: print("[DEBUG]   Copying glyph " + str(glyph) + " from position (" + str (source_glyph_x) + ", " + str (source_glyph_y) + ") to position (" + str (target_glyph_x) + ", " + str (target_glyph_y) + ")")
+    
+    # blit a source glyph to target surface
+    target_surf.blit( source_surf , ( target_glyph_x * GLYPH_SIZE[0] , target_glyph_y * GLYPH_SIZE[1] ) , pygame.Rect( source_glyph_x * GLYPH_SIZE[0], source_glyph_y * GLYPH_SIZE[1] , GLYPH_SIZE[0] , GLYPH_SIZE[1] ) )
 
 # main program execution
 if __name__ == "__main__": main()
