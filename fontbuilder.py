@@ -43,10 +43,37 @@ GLYPH_SUBSET_BTFL_SPECIALS = [*range(32,36)]
 GLYPH_SUBSET_BTFL_SPECIALS.extend( [*range(37,48)] )
 GLYPH_SUBSET_BTFL_SPECIALS.extend( [*range(58,65)] )
 GLYPH_SUBSET_BTFL_SPECIALS.extend( [*range(91,96)] )
-GLYPH_SUBSET_BTFL_SPECIALS.append( 124 ) 
+GLYPH_SUBSET_BTFL_SPECIALS.append( 124 )
+
+# BTFL values icons
+GLYPH_SUBSET_BTFL_VALUES = (1, 4, 5, 16, 17, 18, 20, 21, 30, 31, 36, 112, 113, 122, 123, 127, 137, 152, 155, 156)
+
+# BTFL units symbols
+GLYPH_SUBSET_BTFL_UNITS = (6, 7, 12, 13, 14, 15, 125, 126, 153, 154, 157, 158, 159)
+
+# BTFL AHI glyphs
+GLYPH_SUBSET_BTFL_AHI = (2,3, 19, 114, 115, 116, 117, 118, 119, 120, 128, 129, 130, 131, 132, 133, 134, 135, 136)
+
+# BTFL compass glyphs
+GLYPH_SUBSET_BTFL_COMPASS = [*range(24,30)]
+
+# BTFL battery glyphs
+GLYPH_SUBSET_BTFL_BATTERY = [*range(144,152)]
+
+# BTFL arrow glyphs
+GLYPH_SUBSET_BTFL_ARROW = [*range(96,112)]
+
+# BTFL frame glyphs
+GLYPH_SUBSET_BTFL_FRAME = (8,9,10,11,22,23)
+
+# BTFL progress glyphs
+GLYPH_SUBSET_BTFL_PROGRESS = [*range(138,144)]
+
+# BTFL logo glyphs
+GLYPH_SUBSET_BTFL_LOGO = [*range(160,256)]
 
 # arguments parsing
-SWITCHES_FILE = ("", "base", "btflcharacters", "btfllowletters" , "btflspecials" , "btflnumbers" )
+SWITCHES_FILE = ("", "base", "btflcharacters", "btflnumbers", "btflletters", "btfllowletters" , "btflspecials" , "btflvalues", "btflunits", "btflahi", "btflcompass", "btflbattery", "btflarrow", "btflframe", "btflprogress", "btfllogo" )
 SWITCHES_NOFILE = ("o", "nopreview", "demo")
 
 # supported files extensions
@@ -62,8 +89,18 @@ SWITCH_EXT_SUBSET_OFFSET_MATRIX = [
     ["btflcharacters" , ["ttf", "mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_CHARACTERS , 0 ],
     ["btflspecials" , ["ttf", "mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_SPECIALS , 0 ],
     ["btflnumbers" , ["ttf", "mcm", "bmp", "png"] , GLYPH_SUBSET_BTFLNUMBERS , 0 ],
-
+    ["btflletters" , ["ttf", "mcm", "bmp", "png"]  , GLYPH_SUBSET_BTFL_LETTERS , 0 ],
     ["btfllowletters" , ["ttf"] , GLYPH_SUBSET_BTFL_LOWLETTERS , GLYPH_SUBSET_BTFL_LOWLETTERS_OFFSET ],
+
+    ["btflvalues" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_VALUES , 0 ],
+    ["btflunits" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_UNITS , 0 ],
+    ["btflahi" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_AHI , 0 ],
+    ["btflcompass" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_COMPASS , 0 ],
+    ["btflbattery" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_BATTERY , 0 ],
+    ["btflarrow" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_ARROW , 0 ],
+    ["btflframe" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_FRAME , 0 ],
+    ["btflprogress" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_PROGRESS , 0 ],
+    ["btfllogo" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_LOGO , 0 ],
 
     
 ]
@@ -95,7 +132,7 @@ def main():
 
         # the input file is .TTF font
         if switch in SWITCHES_FILE and path.splitext(values[0])[1][1:].lower() == "ttf":
-            source_font_surfaces.append( load_ttf( *values, chars_to_render=range(32,123) ) )
+            source_font_surfaces.append( load_ttf( *values, chars_to_render=range(32,125) ) )
 
         # the input file is bitmap
         # for bitmap file - guess what type of file it is
@@ -104,8 +141,8 @@ def main():
     target_surf = pygame.Surface((GLYPH_SIZE[0] * FONT_GRID_SIZE[0], GLYPH_SIZE[1] * FONT_GRID_SIZE[1]))
     target_surf.fill(COLOR_TRANSPARENT)
     
-    # process the source surfaces
-    if DEBUG: print("[DEBUG] Source surfaces processor:")
+    # compile the source surfaces
+    if DEBUG: print("[DEBUG] Source surfaces compiler:")
     if DEBUG: print("[DEBUG] ")
     
     for source_nr, source_surf in enumerate( source_font_surfaces ):
@@ -127,18 +164,10 @@ def main():
                  for glyph in switch_matrix[2]:
                     copy_glyph( glyph, source_surf , target_surf , switch_matrix[3])
 
-
-
-
     
     if DEBUG: print("[DEBUG] ----")
-    
-    
-    # copy input surfaces (or its parts) to target surface
-    
-    
 
-    
+
     screen.blit(target_surf,(0,0))
     
     # pygame loop
@@ -152,9 +181,9 @@ def main():
                 pygame.quit()
                 sys.exit()
 
-            if event.type == pygame.KEYUP:
-                pygame.quit()
-                sys.exit()
+            # if event.type == pygame.KEYUP:
+            #     pygame.quit()
+            #     sys.exit()
 
 
         pygame.display.update()
