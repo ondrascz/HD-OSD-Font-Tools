@@ -14,10 +14,15 @@ FONT_GRID_SIZE = (16, 32)
 
 # colors
 COLOR_TRANSPARENT = (127,127,127)
-COLOR_BLACK = (0,0,0)
-COLOR_WHITE = (255,255,255)
+COLOR_MCM_WHITE = (255,255,255)
+COLOR_MCM_BLACK = (0,0,0)
 COLOR_TTF_GLYPH = (255,255,255)
 COLOR_TTF_OUTLINE = (0,0,0)
+
+# logo dimensions
+LOGO_SIZE_BTFL = ( 576, 144 )
+LOGO_SIZE_INAV = ( 240, 144 )
+LOGO_SIZE_MINI = ( 120, 36 )
 
 # glyphs sets definitions
 # all glyphs
@@ -72,12 +77,19 @@ GLYPH_SUBSET_BTFL_PROGRESS = [*range(138,144)]
 # BTFL logo glyphs
 GLYPH_SUBSET_BTFL_LOGO = [*range(160,256)]
 
+# BTFL minilogo glyphs
+GLYPH_SUBSET_BTFL_MINILOGO = ( [*range(91,96)] )
+
+# INAV logo glyphs
+GLYPH_SUBSET_INAV_LOGO = [*range(257,297)]
+
 # arguments parsing
-SWITCHES_FILE = ("", "base", "btflcharacters", "btflnumbers", "btflletters", "btfllowletters" , "btflspecials" , "btflvalues", "btflunits", "btflahi", "btflcompass", "btflbattery", "btflarrow", "btflframe", "btflprogress", "btfllogo" )
+SWITCHES_FILE = ("", "base", "btflcharacters", "btflnumbers", "btflletters", "btfllowletters" , "btflspecials" , "btflvalues", "btflunits", "btflahi", "btflcompass", "btflbattery", "btflarrow", "btflframe", "btflprogress", "btfllogo", "btflminilogo", "inavlogo" )
 SWITCHES_NOFILE = ("o", "nopreview", "demo")
 
 # supported files extensions
 FILE_INPUT_EXTENSIONS = ("ttf", "mcm", "bmp", "png")
+FILE_INPUT_EXTENSIONS_BITMAP = ("bmp", "png")
 
 # switch - extension - subset matrix
 SWITCH_EXT_SUBSET_OFFSET_MATRIX = [
@@ -101,8 +113,9 @@ SWITCH_EXT_SUBSET_OFFSET_MATRIX = [
     ["btflframe" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_FRAME , 0 ],
     ["btflprogress" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_PROGRESS , 0 ],
     ["btfllogo" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_LOGO , 0 ],
+    ["btflminilogo" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_MINILOGO , 0 ],
 
-    
+    ["inavlogo" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_INAV_LOGO , 0 ],
 ]
 
 # main program
@@ -135,7 +148,9 @@ def main():
             source_font_surfaces.append( load_ttf( *values, chars_to_render=range(32,125) ) )
 
         # the input file is bitmap
-        # for bitmap file - guess what type of file it is
+        if switch in SWITCHES_FILE and path.splitext(values[0])[1][1:].lower() in FILE_INPUT_EXTENSIONS_BITMAP:
+            source_font_surfaces.append( load_bitmap( *values ))
+        
 
     # prepare target surface
     target_surf = pygame.Surface((GLYPH_SIZE[0] * FONT_GRID_SIZE[0], GLYPH_SIZE[1] * FONT_GRID_SIZE[1]))
@@ -200,8 +215,8 @@ def load_bitmap():
 # load and process MCM font file
 def load_mcm(
     filename,
-    mcm_glyph_color = COLOR_WHITE,
-    mcm_outline_color = COLOR_BLACK,
+    mcm_glyph_color = COLOR_MCM_WHITE,
+    mcm_outline_color = COLOR_MCM_BLACK,
 ):
     
     if DEBUG: print("[DEBUG] MCM font loader:")
@@ -461,10 +476,6 @@ def validate_args( cli_parsed_args ):
     
     return( valid_args )
 
-# guess file type from a filename
-def guess_file_type():
-    pass
-
 # explode font surface by inserting given gap
 def explode_font_surf(
     font_surf: pygame.Surface,
@@ -472,11 +483,12 @@ def explode_font_surf(
     gap_size = 6,
     outline = True,
 ):
+    if DEBUG: print("[DEBUG] Font bitmap exploder:")
+    if DEBUG: print("[DEBUG]")
+    
     # calculate font grid size
     font_grid_size = (int(font_surf.get_width() / glyph_size[0]) , int(font_surf.get_height() / glyph_size[1]))
-
-    if DEBUG:
-        print("Grid size: " + str(font_grid_size))
+    if DEBUG: print("[DEBUG]   Grid size: " + str(font_grid_size))
 
     # prepare target surface
     exploded_font_surf = pygame.Surface(
@@ -485,8 +497,7 @@ def explode_font_surf(
             gap_size * (font_grid_size[1] + 1) + font_surf.get_height(),
         )
     )
-    if DEBUG:
-        print("Exploded grid size: " + str(exploded_font_surf.get_size()))
+    if DEBUG: print("[DEBUG]   Exploded surface size: " + str(exploded_font_surf.get_size()))
     exploded_font_surf.fill((0,0,0))
 
     # iterate over glyphs and copy them to target surface
@@ -499,8 +510,60 @@ def explode_font_surf(
 
             )
 
+    if DEBUG: print("[DEBUG] ----")
     # return exploded surface
     return exploded_font_surf
+
+# implode font surface by removing given gap
+def implode_font_surf(
+    font_surf: pygame.Surface,
+    glyph_size = GLYPH_SIZE,
+    gap_size = 6,
+    outline = True,
+    double = False,
+):
+    if DEBUG: print("[DEBUG] Font bitmap imploder:")
+    if DEBUG: print("[DEBUG]")
+    
+    # calculate font grid size
+    if outline:
+        font_grid_size = (int((font_surf.get_width() - gap_size) / (glyph_size[0] + gap_size)), int((font_surf.get_height() - gap_size) / (glyph_size[1] + gap_size)))
+    else:
+        font_grid_size = (int((font_surf.get_width() + 1) / (glyph_size[0] + gap_size)), int( (font_surf.get_height() + 1) / (glyph_size[1] + gap_size)))
+
+    if DEBUG: print("[DEBUG]   Grid size: " + str(font_grid_size))
+
+    # prepare target surface
+    imploded_font_surf = pygame.Surface(
+        (
+            font_grid_size[0] * glyph_size[0],
+            font_grid_size[1] * glyph_size[1],
+        )
+    )
+    if DEBUG: print("[DEBUG]   Imploded surface size: " + str(imploded_font_surf.get_size()))
+    imploded_font_surf.fill((0,0,0))
+
+    # iterate over glyphs and copy them to target surface
+    if outline:
+        outer_gap = gap_size
+    else:
+        outer_gap = 0
+    for x in range(0,font_grid_size[0]):
+        for y in range(0,font_grid_size[1]):
+            imploded_font_surf.blit(
+                font_surf,
+                ( x * glyph_size[0], y * glyph_size[1]),
+                pygame.Rect(x * (glyph_size[0] + gap_size) + outer_gap , y * (glyph_size[1] + gap_size) + outer_gap, glyph_size[0], glyph_size[1])
+            )
+
+    # double scale, typically for analog font sources
+    if double:
+        if DEBUG: print("[DEBUG]   Doubling surface size...")
+        imploded_font_surf = pygame.transform.scale(imploded_font_surf, (imploded_font_surf.get_width()*2,imploded_font_surf.get_height()*2))
+    
+    if DEBUG: print("[DEBUG] ----")
+    # return exploded surface
+    return imploded_font_surf
 
 # copy glyph from source surface to target surface
 def copy_glyph(
@@ -522,6 +585,64 @@ def copy_glyph(
     
     # blit a source glyph to target surface
     target_surf.blit( source_surf , ( target_glyph_x * GLYPH_SIZE[0] , target_glyph_y * GLYPH_SIZE[1] ) , pygame.Rect( source_glyph_x * GLYPH_SIZE[0], source_glyph_y * GLYPH_SIZE[1] , GLYPH_SIZE[0] , GLYPH_SIZE[1] ) )
+
+def load_bitmap(
+    filename
+):
+    if DEBUG: print("[DEBUG] Bitmap loader:")
+    if DEBUG: print("[DEBUG]")
+    
+    # load the bitmap file
+    if DEBUG: print("[DEBUG]   Bitmap to load: " + filename)
+    input_surf = pygame.image.load(filename)
+
+    # check the bitmap size
+    input_size = input_surf.get_size()
+    if DEBUG: print("[DEBUG]   Bitmap size: " + str(input_size))
+
+    # HDZERO HD OSD not exploded
+    if input_size == (384, 1152):
+        if DEBUG: print("[DEBUG]   Assuming HDZERO HD OSD font file, not exploded...")
+        font_surf = input_surf
+
+    # HDZERO HD OSD exploded
+    elif input_size == (486, 1350):
+        if DEBUG: print("[DEBUG]   Assuming HDZERO HD OSD font file, exploded...")
+        font_surf = implode_font_surf(input_surf)
+
+    # Analog INAV OSD exploded
+    elif input_size == (209, 609):
+        if DEBUG: print("[DEBUG]   Assuming Analog INAV OSD font file, exploded...")
+        font_surf = implode_font_surf(input_surf, glyph_size=GLYPH_MCM_SIZE, gap_size=1, double=True )
+
+    # Analog BTFL OSD exploded
+    elif input_size == (207, 303):
+        if DEBUG: print("[DEBUG]   Assuming Analog BTFL OSD font file, exploded...")
+        font_surf = implode_font_surf(input_surf, glyph_size=GLYPH_MCM_SIZE, gap_size=1, outline=False,  double=True )
+
+    # Not known, assuming logo
+    else:
+        if DEBUG: print("[DEBUG]   Not known bitmap size. Assuming it's a logo...")
+        
+        # resize and slice to three logo variants
+        # BTFL logo - 576x144
+        # INAV logo - 240x144
+        # BTFL minilogo - 120x36
+        
+        font_surf = pygame.Surface(( GLYPH_SIZE[0] * FONT_GRID_SIZE[0] , GLYPH_SIZE[1] * FONT_GRID_SIZE[1] ))
+        font_surf.fill( COLOR_TRANSPARENT )
+
+        input_ar = input_size[0] / input_size[1]
+        if DEBUG: print("[DEBUG]   Bitmap AR: " + str(input_ar))
+        
+        if input_ar > (120 / 36):
+            scaled_logo_surf = pygame.transform.smoothscale(input_surf , (120, input_size[1] * 120 / input_size[0]  ) )
+            font_surf.blit(scaled_logo_surf, ( 264 ,180))
+        
+        # font_surf = pygame.transform.smoothscale(input_surf , (384, 1152) )
+    
+    if DEBUG: print("[DEBUG] ----")
+    return(font_surf)
 
 # main program execution
 if __name__ == "__main__": main()
