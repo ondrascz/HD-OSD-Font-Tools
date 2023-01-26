@@ -46,6 +46,10 @@
 @REM py fontbuilder.py^
 @REM  resources/fonts/BTFL_analog_default.png
 
-py fontbuilder.py^
- -base resources/fonts/BTFL_ondrascz.MCM #AAAAFF^
- -btflminilogo resources/logos/BTFL_hornet.png
+@REM py fontbuilder.py^
+@REM  -base resources/fonts/INAV6_gjs_visionplus_v1.0.0.bmp^
+@REM  -btflminilogo "resources/logos/BTFL_ondras.png"
+
+ py fontbuilder.py^
+  -base resources/fonts/INAV6_gjs_visionplus_v1.0.0.bmp^
+  -inavlogo "resources/logos/BTFL_ondras_analog.png"

@@ -183,7 +183,7 @@ def main():
     if DEBUG: print("[DEBUG] ----")
 
 
-    screen.blit(target_surf,(0,0))
+    screen.blit( target_surf ,(0,0))
     
     # pygame loop
     while True:
@@ -205,12 +205,6 @@ def main():
         clock.tick(60)
 
 # the load functions return a pygame Surface
-# load and process a bitmap image
-def load_bitmap():
-    # image can be a font bitmap of different dimmension
-    # image can be a generoc bitmap to be used as a logo
-    # [ ] format guesser
-    pass
 
 # load and process MCM font file
 def load_mcm(
@@ -594,7 +588,8 @@ def load_bitmap(
     
     # load the bitmap file
     if DEBUG: print("[DEBUG]   Bitmap to load: " + filename)
-    input_surf = pygame.image.load(filename)
+    input_surf_file = pygame.image.load(filename).convert_alpha()
+    input_surf = input_surf_file.copy()
 
     # check the bitmap size
     input_size = input_surf.get_size()
@@ -620,29 +615,111 @@ def load_bitmap(
         if DEBUG: print("[DEBUG]   Assuming Analog BTFL OSD font file, exploded...")
         font_surf = implode_font_surf(input_surf, glyph_size=GLYPH_MCM_SIZE, gap_size=1, outline=False,  double=True )
 
-    # Not known, assuming logo
+    # Not known font set, assuming logo
     else:
-        if DEBUG: print("[DEBUG]   Not known bitmap size. Assuming it's a logo...")
+        if DEBUG: print("[DEBUG]   Not font set related bitmap size. Assuming it's a logo...")
         
+        # complicated way to ensure the correct transparency even though the input surface is scalled in next steps
+        if input_size == (288, 72):
+            # Source for BTFL analog logo with green background
+            input_surf_file.set_colorkey( (0,255,0) )
+            input_surf.fill((127,127,127,0))
+            input_surf.blit(input_surf_file, (0,0))
+            input_surf = pygame.transform.scale(input_surf , (576,144) )
+        else:
+            input_surf_file.set_colorkey(COLOR_TRANSPARENT)
+            input_surf.fill((127,127,127,0))
+            input_surf.blit(input_surf_file, (0,0))
+
         # resize and slice to three logo variants
         # BTFL logo - 576x144
         # INAV logo - 240x144
         # BTFL minilogo - 120x36
-        
+
         font_surf = pygame.Surface(( GLYPH_SIZE[0] * FONT_GRID_SIZE[0] , GLYPH_SIZE[1] * FONT_GRID_SIZE[1] ))
         font_surf.fill( COLOR_TRANSPARENT )
 
-        input_ar = input_size[0] / input_size[1]
-        if DEBUG: print("[DEBUG]   Bitmap AR: " + str(input_ar))
+        # BTFL mini logo
+        scaled_logo_surf = fit_surf_into( input_surf , (120,36) ).convert_alpha()
+        font_surf.blit(scaled_logo_surf, ( 264 ,180))
+
+        # BTFL logo
+        scaled_logo_surf = fit_surf_into( input_surf , (576,144) ).convert_alpha()
+        font_surf.blit(scaled_logo_surf, (0 ,360), pygame.Rect(0,0,384,36))
+        font_surf.blit(scaled_logo_surf, (0 ,396), pygame.Rect(384,0,192,36))
+        font_surf.blit(scaled_logo_surf, (192 ,396), pygame.Rect(0,36,192,36))
+        font_surf.blit(scaled_logo_surf, (0 ,432), pygame.Rect(192,36,384,36))
+        font_surf.blit(scaled_logo_surf, (0 ,468), pygame.Rect(0,72,384,36))
+        font_surf.blit(scaled_logo_surf, (0 ,504), pygame.Rect(384,72,192,36))
+        font_surf.blit(scaled_logo_surf, (192 ,504), pygame.Rect(0,108,192,36))
+        font_surf.blit(scaled_logo_surf, (0 ,540), pygame.Rect(192,108,384,36))
+
+        # INAV logo
+        scaled_logo_surf = fit_surf_into( input_surf , (240,144) ).convert_alpha()
+        font_surf.blit(scaled_logo_surf, (24 ,576) , pygame.Rect(0,0,240,36) )
+        font_surf.blit(scaled_logo_surf, (264 ,576) , pygame.Rect(0,36,120,36) )
+        font_surf.blit(scaled_logo_surf, (0 ,612) , pygame.Rect(120,36,120,36) )
+        font_surf.blit(scaled_logo_surf, (120 ,612) , pygame.Rect(0,72,240,36) )
+        font_surf.blit(scaled_logo_surf, (360 ,612) , pygame.Rect(0,108,24,36) )
+        font_surf.blit(scaled_logo_surf, (0 ,648) , pygame.Rect(24,108,216,36) )
+
         
-        if input_ar > (120 / 36):
-            scaled_logo_surf = pygame.transform.smoothscale(input_surf , (120, input_size[1] * 120 / input_size[0]  ) )
-            font_surf.blit(scaled_logo_surf, ( 264 ,180))
-        
-        # font_surf = pygame.transform.smoothscale(input_surf , (384, 1152) )
     
     if DEBUG: print("[DEBUG] ----")
     return(font_surf)
+
+# helper function to scale down a surface while maintaining the aspect ratio
+def fit_surf_into(
+    input_surf: pygame.Surface,
+    output_size = (320, 240),
+):
+    
+    if DEBUG: print("[DEBUG] Surface resize to fit into given space:")
+    if DEBUG: print("[DEBUG]")
+    
+    input_size = input_surf.get_size()
+    input_rect = input_surf.get_rect()
+    input_ar = input_size[0] / input_size[1]
+    output_ar = output_size[0] / output_size[1]
+
+    if DEBUG: print("[DEBUG]   Input size: " + str(input_size))
+    if DEBUG: print("[DEBUG]   Fit to size: " + str(output_size))
+
+    # prepare the ouput surface
+    output_surf = pygame.Surface( output_size ).convert_alpha()
+    output_surf.fill((0,0,0,0))
+    output_rect = output_surf.get_rect()
+
+    # is the input larger that the output?
+    if input_size[0] > output_size[0] or input_size[0] > output_size[0]:
+        
+        # at least one input dimmension is larger that the output one
+        # scale down while maintaining the AR
+        if input_ar > output_ar:
+            scaled_logo_surf = pygame.transform.smoothscale(input_surf , ( output_size[0] , input_size[1] * output_size[0] / input_size[0] ))
+            
+        else:
+            scaled_logo_surf = pygame.transform.smoothscale(input_surf , ( input_size[0] * output_size[1] / input_size[1] , output_size[1] ) )
+
+        
+        # blit scaled surface to the center of the output surface
+        scaled_logo_rect = scaled_logo_surf.get_rect()
+        scaled_logo_rect.center = output_rect.center
+        output_surf.blit(scaled_logo_surf , scaled_logo_rect )
+
+        if DEBUG: print("[DEBUG]   Output size: " + str(scaled_logo_surf.get_size()))
+    
+    else:
+
+        # the input size is smaller or equal to output size 
+        # blit input surface to the center of the output surface
+        input_rect.center = output_rect.center
+        output_surf.blit(input_surf , input_rect )
+
+        if DEBUG: print("[DEBUG]   Output size (not touched): " + str(input_size))
+    
+    if DEBUG: print("[DEBUG] ----")
+    return( output_surf )
 
 # main program execution
 if __name__ == "__main__": main()
