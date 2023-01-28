@@ -11,6 +11,7 @@ DEBUG = True
 GLYPH_SIZE = (24, 36)
 GLYPH_MCM_SIZE = (12, 18)
 FONT_GRID_SIZE = (16, 32)
+DEMO_GRID_SIZE = (53,20)
 
 # colors
 COLOR_TRANSPARENT = (127,127,127)
@@ -261,6 +262,57 @@ def main():
         pygame.display.set_icon( pygame.image.load("resources/icon/icon.png") )
         pygame.display.set_caption("Font Builder Demo (click to close)")
         screen = pygame.display.set_mode((1280,720), pygame.SCALED)
+
+        # demo background
+        demo_surf = pygame.image.load("resources/demo/bkg_001.jpg")
+        demo_surf = pygame.transform.smoothscale(demo_surf, (1280,720))
+        screen.blit(demo_surf, (0,0))
+
+        # print OSD elements
+        
+        # BTFL mini logo
+        print_glyph( string_to_ord_list("[\]^_ MINILOGO") , target_surf , screen , (1,1) )
+        
+        # BTFL logo
+        print_glyph( string_to_ord_list("BTFL LOGO:") , target_surf , screen , (22,4) )
+        print_glyph( [*range(160,184)] , target_surf , screen , (15,5) )
+        print_glyph( [*range(184,208)] , target_surf , screen , (15,6) )
+        print_glyph( [*range(208,232)] , target_surf , screen , (15,7) )
+        print_glyph( [*range(232,256)] , target_surf , screen , (15,8) )
+
+        # INAV logo
+        print_glyph( string_to_ord_list("INAV6 LOGO:") , target_surf , screen , (22,9) )
+        print_glyph( [*range(257,267)] , target_surf , screen , (22,10) )
+        print_glyph( [*range(267,277)] , target_surf , screen , (22,11) )
+        print_glyph( [*range(277,287)] , target_surf , screen , (22,12) )
+        print_glyph( [*range(287,297)] , target_surf , screen , (22,13) )
+
+        # compass
+        print_glyph( (24, 29 , 28 , 29 , 26 , 29 , 28 ,  ) , target_surf , screen , (22,1) )
+
+        # lon / lat
+        print_glyph( [137,] , target_surf , screen , (40,1) )
+        print_glyph( string_to_ord_list("52.2041699") , target_surf , screen , (41,1) )
+        print_glyph( [152,] , target_surf , screen , (40,2) )
+        print_glyph( string_to_ord_list("13.0169579") , target_surf , screen , (41,2) )
+
+        # home
+        print_glyph( [98,17] , target_surf , screen , (22,3 ))
+        print_glyph( string_to_ord_list("2.46" + chr(125)) , target_surf , screen , (24,3) )
+
+        # voltage
+        print_glyph( string_to_ord_list(chr(149) + "3.81" + chr(6)) , target_surf , screen , (20,18) )
+
+        # fly time
+        print_glyph( string_to_ord_list(chr(156) + "12:35") , target_surf , screen , (30,18) )
+
+        # speed
+        print_glyph( string_to_ord_list(chr(112) + "94" + chr(158)) , target_surf , screen , (40,18) )
+
+        # capacity
+        print_glyph( string_to_ord_list("965" + chr(7)) , target_surf , screen , (10,18) )
+        
+
 
 
 
@@ -665,6 +717,41 @@ def copy_glyph(
     # blit a source glyph to target surface
     target_surf.blit( source_surf , ( target_glyph_x * GLYPH_SIZE[0] , target_glyph_y * GLYPH_SIZE[1] ) , pygame.Rect( source_glyph_x * GLYPH_SIZE[0], source_glyph_y * GLYPH_SIZE[1] , GLYPH_SIZE[0] , GLYPH_SIZE[1] ) )
 
+# helper to convert a string to a list of ascii codes of the string's characters
+def string_to_ord_list( string ):
+    return [ ord(x) for x in list(string) ]
+
+# prints a set of given glyphs to a target surface
+def print_glyph(
+    chars,
+    font_surf :pygame.Surface,
+    target_surf :pygame.Surface,
+    print_at = (0,0),
+    glyph_size = GLYPH_SIZE,
+    font_grid_size = FONT_GRID_SIZE,
+    color_transparent = COLOR_TRANSPARENT,
+):
+    if DEBUG: print("[DEBUG] Glyph Printer:")
+    if DEBUG: print("[DEBUG]")
+    
+    font_surf.set_colorkey(color_transparent)
+
+    for char in enumerate( chars ):
+        # calculate source glyph coordinates
+        source_glyph_y= floor( (char[1]) / font_grid_size[0] )
+        source_glyph_x=(char[1]) - source_glyph_y * font_grid_size[0]
+
+        # calculate target glyph coordinates
+        screen_glyph_x = print_at[0] + char[0]
+        screen_glyph_y = print_at[1]
+
+        if DEBUG: print("[DEBUG]   Printing glyph code (" + str(char[1]) + ") from a font position " + str( (source_glyph_x, source_glyph_y) )  + " to demo screen position " + str( ( screen_glyph_x , screen_glyph_y ) ))
+
+        # blit a font glyph to the target surface
+        target_surf.blit( font_surf , ( screen_glyph_x * glyph_size[0] , screen_glyph_y * glyph_size[1] ) , pygame.Rect( source_glyph_x * glyph_size[0], source_glyph_y * glyph_size[1] , glyph_size[0] , glyph_size[1] )   )
+
+
+# load a bitmap and convert it to a font surface
 def load_bitmap(
     filename
 ):

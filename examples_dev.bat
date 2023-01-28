@@ -50,13 +50,56 @@
 @REM  -base resources/fonts/INAV6_gjs_visionplus_v1.0.0.bmp^
 @REM  -btflminilogo "resources/logos/BTFL_ondras.png"
 
- py fontbuilder.py^
-  -base resources/fonts/INAV6_gjs_visionplus_v1.0.0.bmp^
-  -btfllogo "resources/logos/BTFL_ondras_analog.png"^
-  -btflminilogo "resources/logos/BTFL_ondras.png"^
-  -o "out/compiled_font.bmp"^
-  -explode
+@REM  py fontbuilder.py^
+@REM   -base resources/fonts/INAV6_gjs_visionplus_v1.0.0.bmp^
+@REM   -btflminilogo "resources/logos/BTFL_ondras.png"^
+@REM   -btfllogo "resources/logos/BTFL_hdzero.png"^
+@REM   -inavlogo "resources/logos/BTFL_hdzero.png"^
+@REM   -o "out/compiled_font.bmp"^
+@REM   -explode
 
 
 @REM py fontbuilder.py^
-@REM  -btflspecials resources\ttf\Audiowide-Regular.ttf 25 1.5 1 #FF8888
+@REM  -btflcharacters "resources/ttf/hemi.ttf" 28 1.2 1 #77AAFF
+@REM  -o "out/compiled_font.bmp"^
+@REM  -explode
+
+@REM  py fontbuilder.py^
+@REM  -btflcharacters "resources/ttf/DaysOne-Regular.ttf" 20 1.2 1 #77AAFF^
+@REM  -o "out/compiled_font.bmp"^
+@REM  -explode
+
+@REM   py fontbuilder.py^
+@REM  -btflcharacters "resources/ttf/RussoOne-Regular.ttf" 28 1.3 1 #77AAFF^
+@REM  -o "out/compiled_font.bmp"^
+@REM  -explode
+
+@REM py fontbuilder.py^
+@REM  -base "resources/fonts/BTFL_ondrascz_grey.png"^
+@REM  -btflcharacters "resources/ttf/DaysOne-Regular.ttf" 20 1.2 1 ^
+@REM  -btfllowletters "resources/ttf/DaysOne-Regular.ttf" 20 1.2 1 ^
+@REM  -btflnumbers "resources/ttf/a4speed.ttf" 22 1.5 1.6 ^
+@REM  -o "out/compiled_font.bmp"^
+@REM  -explode
+
+@REM  py fontbuilder.py^
+@REM  -base "resources/fonts/BTFL_ondrascz_grey.png"^
+@REM  -btflprogress "resources/fonts/BTFL_ondrascz_white.png"^
+@REM  -o "docs/btfl_progress.bmp"^
+
+@REM  py fontbuilder.py^
+@REM  -base "resources/fonts/BTFL_ondrascz_grey.png"^
+@REM  -btfllogo "resources/logos/BTFL_betaflight.png"^
+@REM  -o "docs/btfl_btfllogo.bmp"^
+
+
+
+ py fontbuilder.py^
+ -base "resources/fonts/BTFL_ondrascz_color.bmp"^
+ -btflcharacters "resources/ttf/DaysOne-Regular.ttf" 20 1.2 1 ^
+ -btflnumbers "resources/ttf/a4speed.ttf" 22 1.5 1.6 #FFFF66 ^
+ -btfllogo "resources/logos/BTFL_hdzero.png"^
+ -btflminilogo "resources/logos/BTFL_ondras.png"^
+ -inavlogo "resources/fonts/INAV6_gjs_visionplus_v1.0.0.bmp"^
+ -btfldemo^
+ -o "out/btfl_demo_font.bmp"^
