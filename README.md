@@ -1,10 +1,10 @@
 # HD OSD Font Tools
 
-A tool for building and manipulating the HD OSD fonts especially for HDZERO VRX and goggles. The initial version is supposed to build HD OSD fonts for the Betaflight (BTLF) FC variant.
+A tool for building and manipulating the HD OSD fonts for HDZERO VRXs and goggles. The initial version is supposed to build HD OSD fonts for the Betaflight (BTLF) FC variant. For the INAV6 FC variant the tool has a limited support to create the logo.
 
 ## Usage
 
-The tool is command line based with a graphical preview of the built font. User can choose one or more sources to build the font for HDZERO VRX or goggles (.bmp file).
+The tool is command line based with a graphical preview of the built font. User can choose one or more sources to build the font.
 
 The source can be:
 
@@ -24,6 +24,8 @@ The source can be used as a part of the built font such as:
 - values icons
 - units symbols
 - home arrow
+- AHI elements
+- logo
 - etc.
 
 

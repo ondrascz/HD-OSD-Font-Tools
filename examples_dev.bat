@@ -52,4 +52,11 @@
 
  py fontbuilder.py^
   -base resources/fonts/INAV6_gjs_visionplus_v1.0.0.bmp^
-  -inavlogo "resources/logos/BTFL_ondras_analog.png"
+  -btfllogo "resources/logos/BTFL_ondras_analog.png"^
+  -btflminilogo "resources/logos/BTFL_ondras.png"^
+  -o "out/compiled_font.bmp"^
+  -explode
+
+
+@REM py fontbuilder.py^
+@REM  -btflspecials resources\ttf\Audiowide-Regular.ttf 25 1.5 1 #FF8888

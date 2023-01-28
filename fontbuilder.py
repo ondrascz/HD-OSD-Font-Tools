@@ -85,7 +85,7 @@ GLYPH_SUBSET_INAV_LOGO = [*range(257,297)]
 
 # arguments parsing
 SWITCHES_FILE = ("", "base", "btflcharacters", "btflnumbers", "btflletters", "btfllowletters" , "btflspecials" , "btflvalues", "btflunits", "btflahi", "btflcompass", "btflbattery", "btflarrow", "btflframe", "btflprogress", "btfllogo", "btflminilogo", "inavlogo" )
-SWITCHES_NOFILE = ("o", "nopreview", "demo")
+SWITCHES_NOFILE = ("o", "explode", "nopreview", "btfldemo", "inavdemo")
 
 # supported files extensions
 FILE_INPUT_EXTENSIONS = ("ttf", "mcm", "bmp", "png")
@@ -121,13 +121,14 @@ SWITCH_EXT_SUBSET_OFFSET_MATRIX = [
 # main program
 def main():
 
-    # init a pygame screen
+    # init pygame
     pygame.init()
+    clock = pygame.time.Clock() 
+
+    # init a pygame screen (the default one for a built font)
     pygame.display.set_icon( pygame.image.load("resources/icon/icon.png") )
-    screen = pygame.display.set_mode((GLYPH_SIZE[0] * FONT_GRID_SIZE[0], GLYPH_SIZE[1] * FONT_GRID_SIZE[1]), pygame.SCALED)
-    screen.fill( COLOR_TRANSPARENT )
     pygame.display.set_caption("Font Builder Preview (click to close)")
-    clock = pygame.time.Clock()
+    screen = pygame.display.set_mode((GLYPH_SIZE[0] * FONT_GRID_SIZE[0], GLYPH_SIZE[1] * FONT_GRID_SIZE[1]), pygame.SCALED)
 
     # parse CLI arguments
     cli_parsed_args = parse_cli_args()
@@ -150,9 +151,8 @@ def main():
         # the input file is bitmap
         if switch in SWITCHES_FILE and path.splitext(values[0])[1][1:].lower() in FILE_INPUT_EXTENSIONS_BITMAP:
             source_font_surfaces.append( load_bitmap( *values ))
-        
 
-    # prepare target surface
+    # prepare target surface (for the built font)
     target_surf = pygame.Surface((GLYPH_SIZE[0] * FONT_GRID_SIZE[0], GLYPH_SIZE[1] * FONT_GRID_SIZE[1]))
     target_surf.fill(COLOR_TRANSPARENT)
     
@@ -178,12 +178,97 @@ def main():
                  # copy the glyphs from the source to the target surface
                  for glyph in switch_matrix[2]:
                     copy_glyph( glyph, source_surf , target_surf , switch_matrix[3])
-
     
     if DEBUG: print("[DEBUG] ----")
 
 
-    screen.blit( target_surf ,(0,0))
+    # process the valid output options
+    if DEBUG: print("[DEBUG] Output handling:")
+    if DEBUG: print("[DEBUG] ")
+    
+    show_preview = True
+    show_demo = False
+    demo_variant = "btfldemo"
+    explode_output = False
+    save_font = False
+
+    for switch, values in valid_args:
+
+        if switch in SWITCHES_NOFILE:
+
+            # disable preview
+            if switch == "nopreview" or switch == "btfldemo" or switch == "inavdemo":
+                show_preview = False
+                if DEBUG: print("[DEBUG]   Preview will not open...")
+
+            # enable demo
+            if switch == "btfldemo" or switch == "inavdemo":
+                show_preview = False
+                show_demo = True
+
+                if switch == "inavdemo": demo_variant = "inavdemo"
+
+                if DEBUG: print("[DEBUG]   Demo \"" + demo_variant + "\" will open instead of preview...")
+                
+            # enable exploded output
+            if switch == "explode":
+                explode_output = True
+                if DEBUG: print("[DEBUG]   Saved font will be exploded...")
+
+            # save built font
+            if switch == "o":
+                if values[0] != "":
+                    
+                    save_font = True
+                    corrected_filename = path.splitext(values[0])[0] + ".bmp" 
+                    
+                    if DEBUG: print("[DEBUG]   Font will be saved...")
+                    if DEBUG: print("[DEBUG]     entered file name: " + str(values[0]))
+                    if DEBUG: print("[DEBUG]     corrected file name: " + corrected_filename)
+
+    # handle font output to a file
+    if save_font == True:
+        
+        if DEBUG: print("[DEBUG]   Saving the built font...")
+
+        if explode_output == True:
+            pygame.image.save( explode_font_surf( target_surf ) , corrected_filename )
+        else:
+            pygame.image.save( target_surf , corrected_filename )
+
+    # handle windows
+    if show_preview == True:
+        
+        # show preview
+        if DEBUG: print("[DEBUG]   Showing preview of the font...")
+        screen.blit( target_surf ,(0,0))
+    
+    elif show_preview == False and show_demo == False :
+
+        # close preview, quit
+        if DEBUG: print("[DEBUG]   Disabling preview window, quitting...")
+        
+        pygame.display.quit()
+        pygame.quit()
+        sys.exit()
+
+    elif show_preview == False and show_demo == True :
+
+        # close preview, open demo
+        if DEBUG: print("[DEBUG]   Disabling preview window, Opening demo window...")
+        
+        pygame.display.quit()
+        pygame.display.set_icon( pygame.image.load("resources/icon/icon.png") )
+        pygame.display.set_caption("Font Builder Demo (click to close)")
+        screen = pygame.display.set_mode((1280,720), pygame.SCALED)
+
+
+
+            
+
+
+
+    
     
     # pygame loop
     while True:

@@ -77,8 +77,8 @@
   * [x] open image to Surface
     * [x] get image dimensions
     * [x] Surface from image work with transparency (color vs. alpha in PNG)
-      * [x] zkusit otevrit image s transparenci a bez a zkusit metodu get_flags()
-      * [x] zkusit otevrit image s transparenci a vnutit mu color key
+      * [x] test transparent and not transparent sources, test get_flags()
+      * [x] test transparent image, force color_key
   * [x] save Surface to BMP / PNG
   * [x] open text file to read
   * [x] parse MCM
@@ -94,8 +94,12 @@
 * Opening input file(s)
   * [x] input file as argument
   * [x] check if file exists
-  * [ ] image / mcm ?
-  * [ ] guess format
+  * [x] image / mcm ?
+  * [x] guess format
+* Font Demo
+  * [ ] 1280x720 screen with "real life" background
+  * [ ] render few OSD elements
+  * [ ] BTFL and INAV (olny loho) variants
 
 ## Ideas
 
