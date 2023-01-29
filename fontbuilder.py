@@ -296,31 +296,33 @@ def main():
         print_glyph( [152,] , target_surf , screen , (40,2) )
         print_glyph( string_to_ord_list("13.0169579") , target_surf , screen , (41,2) )
 
+        # alt
+        print_glyph( string_to_ord_list( chr(127) + "37.2" + chr(12)) , target_surf , screen , (3,4) )
         # home
-        print_glyph( [98,32,17] , target_surf , screen , (22,3 ))
-        print_glyph( string_to_ord_list("2.46" + chr(125)) , target_surf , screen , (25,3) )
+        print_glyph( [98,32,17] , target_surf , screen , (22,4 ))
+        print_glyph( string_to_ord_list("2.46" + chr(125)) , target_surf , screen , (25,4) )
+        # sats
+        print_glyph( string_to_ord_list( chr(30) + chr(31) + "13") , target_surf , screen , (45,4) )
 
-        
         # odo
         print_glyph( string_to_ord_list(chr(113) + "876" + chr(12)) , target_surf , screen , (4,16) )
         # current
         print_glyph( string_to_ord_list("12.44" + chr(154)) , target_surf , screen , (3,17) )
         # capacity
         print_glyph( string_to_ord_list("965" + chr(7)) , target_surf , screen , (5,18) )
-        
         # voltage
         print_glyph( string_to_ord_list(chr(149) + "3.81" + chr(6)) , target_surf , screen , (15,18) )
-
         # fly time
         print_glyph( string_to_ord_list(chr(156) + "12:35") , target_surf , screen , (25,18) )
-
         # speed
         print_glyph( string_to_ord_list(chr(112) + "94" + chr(158)) , target_surf , screen , (35,18) )
-
         # rssi
         print_glyph( string_to_ord_list(chr(1) + "-85") , target_surf , screen , (45,17) )
         # lq
         print_glyph( string_to_ord_list(chr(123) + "2:100") , target_surf , screen , (45,18) )
+
+        # text
+        print_glyph( string_to_ord_list("*** THAT IS FLYING PRETTY WELL ***") , target_surf , screen , (10,10) )
 
         
 
