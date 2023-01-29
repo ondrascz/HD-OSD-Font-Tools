@@ -420,73 +420,80 @@ def load_mcm(
 
 # load and process TTF font file
 def load_ttf(
-    ttf_file,
-    ttf_size = 15,
-    ttf_outline_thickness = 1.5,
-    ttf_vertical_stretch = 1,
-    ttf_glyph_color = COLOR_TTF_GLYPH,
-    ttf_outline_color = COLOR_TTF_OUTLINE,
-    ttf_super_sampling = 6,
+    font_file,
+    size = 15,
+    outline_thickness = 1.5,
+    glyph_vertical_stretch = 1,
+    glyph_offset_x = 0,
+    glyph_offset_y = 0,
+    outline_offset_x = 0,
+    outline_offset_y = 0,
+    glyph_color = COLOR_TTF_GLYPH,
+    outline_color = COLOR_TTF_OUTLINE,
+    super_sampling = 8,
     chars_to_render = GLYPH_SUBSET_BTFL_CHARACTERS,
-    glyph_offset = 0,
 ):
     
     if DEBUG: print("[DEBUG] TTF font loader:")
     if DEBUG: print("[DEBUG]")
     
     # repair the arguments types (might be originated from a command line and be strings)
-    ttf_size = int(ttf_size)
-    ttf_super_sampling = int(ttf_super_sampling)
-    ttf_outline_thickness = float(ttf_outline_thickness)
-    ttf_vertical_stretch = float(ttf_vertical_stretch)
+    size = int(size)
+    super_sampling = int(super_sampling)
+    outline_thickness = float(outline_thickness)
+    glyph_vertical_stretch = float(glyph_vertical_stretch)
+    glyph_offset_x = float(glyph_offset_x)
+    glyph_offset_y = float(glyph_offset_y)
+    outline_offset_x = float(outline_offset_x)
+    outline_offset_y = float(outline_offset_y)
     
     
     # load the font file
-    if DEBUG: print("[DEBUG] TTF font to load: " + ttf_file)
-    if DEBUG: print("[DEBUG] TTF font size to render: " + str(ttf_size))
-    osd_font = pygame.font.Font(ttf_file, ttf_size * ttf_super_sampling)
+    if DEBUG: print("[DEBUG] TTF font to load: " + font_file)
+    if DEBUG: print("[DEBUG] TTF font size to render: " + str(size))
+    osd_font = pygame.font.Font(font_file, size * super_sampling)
     
     # surfaces to operate glyphs and font
     font_surf = pygame.Surface(( GLYPH_SIZE[0] * FONT_GRID_SIZE[0] , GLYPH_SIZE[1] * FONT_GRID_SIZE[1] ))
     font_surf.fill( COLOR_TRANSPARENT )
-    glyph_ttf_surf = pygame.Surface((GLYPH_SIZE[0] * ttf_super_sampling, GLYPH_SIZE[1] * ttf_super_sampling  / ttf_vertical_stretch)).convert_alpha()
+    glyph_ttf_surf = pygame.Surface((GLYPH_SIZE[0] * super_sampling, GLYPH_SIZE[1] * super_sampling  / glyph_vertical_stretch)).convert_alpha()
     
     for char in chars_to_render:
 
-        glyph_y= floor( (char+glyph_offset) / FONT_GRID_SIZE[0] )
-        glyph_x=(char+glyph_offset) - glyph_y * FONT_GRID_SIZE[0]
+        glyph_y= floor( (char) / FONT_GRID_SIZE[0] )
+        glyph_x=(char) - glyph_y * FONT_GRID_SIZE[0]
         
         # clean the surface for this glyph
         glyph_ttf_surf.fill( COLOR_TRANSPARENT )
         
         osd_character = chr(char)
-        osd_glyph = osd_font.render(osd_character,True,ttf_glyph_color)
+        osd_glyph = osd_font.render(osd_character,True,glyph_color)
         osd_glyph_rect = osd_glyph.get_rect()
-        osd_outline = osd_font.render(osd_character,False,ttf_outline_color)
+        osd_outline = osd_font.render(osd_character,False,outline_color)
         osd_outline_rect = osd_outline.get_rect()
         
         # blit not anti aliased outline to glyph surface
-        for x in range(int(-ttf_outline_thickness * ttf_super_sampling) , int(ttf_outline_thickness * ttf_super_sampling) + 1):
-            for y in range(int(-ttf_outline_thickness * ttf_super_sampling / ttf_vertical_stretch) ,int(ttf_outline_thickness * ttf_super_sampling / ttf_vertical_stretch) + 1):
-                osd_outline_rect.centerx = GLYPH_SIZE[0]/2 * ttf_super_sampling + x
-                osd_outline_rect.centery = GLYPH_SIZE[1]/2 * ttf_super_sampling / ttf_vertical_stretch + y
+        for x in range(int(-outline_thickness * super_sampling) , int(outline_thickness * super_sampling) + 1):
+            for y in range(int(-outline_thickness * super_sampling / glyph_vertical_stretch) ,int(outline_thickness * super_sampling / glyph_vertical_stretch) + 1):
+                osd_outline_rect.centerx = x + ( GLYPH_SIZE[0]/2 + outline_offset_x + glyph_offset_x ) * super_sampling
+                osd_outline_rect.centery = y + ( GLYPH_SIZE[1]/2 + outline_offset_y + glyph_offset_y ) * super_sampling / glyph_vertical_stretch
                 glyph_ttf_surf.blit(osd_outline, osd_outline_rect)
 
         # scale down the outline, blit to font surface
         font_surf.blit(
-            pygame.transform.scale(glyph_ttf_surf,(glyph_ttf_surf.get_size()[0]/ttf_super_sampling, glyph_ttf_surf.get_size()[1]/ttf_super_sampling * ttf_vertical_stretch)),
+            pygame.transform.scale(glyph_ttf_surf,(glyph_ttf_surf.get_size()[0]/super_sampling, glyph_ttf_surf.get_size()[1]/super_sampling * glyph_vertical_stretch)),
             (glyph_x*GLYPH_SIZE[0],glyph_y*GLYPH_SIZE[1])
         )
         
         # blit anti aliased glyph to glyph surface
         glyph_ttf_surf.fill((0,0,0,0))
-        osd_glyph_rect.centerx = GLYPH_SIZE[0]/2 * ttf_super_sampling
-        osd_glyph_rect.centery = GLYPH_SIZE[1]/2 * ttf_super_sampling / ttf_vertical_stretch
+        osd_glyph_rect.centerx = ( GLYPH_SIZE[0]/2 + glyph_offset_x ) * super_sampling
+        osd_glyph_rect.centery = ( GLYPH_SIZE[1]/2 + glyph_offset_y ) * super_sampling / glyph_vertical_stretch
         glyph_ttf_surf.blit(osd_glyph, osd_glyph_rect)
         
         # scale down the glyph, blit to font surface
         font_surf.blit(
-            pygame.transform.smoothscale(glyph_ttf_surf,(glyph_ttf_surf.get_size()[0]/ttf_super_sampling, glyph_ttf_surf.get_size()[1]/ttf_super_sampling * ttf_vertical_stretch)),
+            pygame.transform.smoothscale(glyph_ttf_surf,(glyph_ttf_surf.get_size()[0]/super_sampling, glyph_ttf_surf.get_size()[1]/super_sampling * glyph_vertical_stretch)),
             (glyph_x*GLYPH_SIZE[0],glyph_y*GLYPH_SIZE[1])
         )
 
@@ -509,7 +516,7 @@ def parse_cli_args():
     # iterate over a list of arguments except the first (program file name)
     for arg in sys.argv[1:]:
         # is the argument a switch?
-        if arg[0:1] == "-":
+        if arg[0:1] == "-" and not arg[1:2].isnumeric() :
             # append previous switch and its values to parsed arguments list
             cli_parsed_args.append([cli_switch, cli_switch_values])
             # set the name of the current switch
