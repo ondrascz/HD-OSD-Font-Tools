@@ -114,7 +114,7 @@ SWITCH_EXT_SUBSET_OFFSET_MATRIX = [
     ["btflframe" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_FRAME , 0 ],
     ["btflprogress" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_PROGRESS , 0 ],
     ["btfllogo" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_LOGO , 0 ],
-    ["btflminilogo" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_BTFL_MINILOGO , 0 ],
+    ["btflminilogo" , [ "bmp", "png"] , GLYPH_SUBSET_BTFL_MINILOGO , 0 ],
 
     ["inavlogo" , ["mcm", "bmp", "png"] , GLYPH_SUBSET_INAV_LOGO , 0 ],
 ]
