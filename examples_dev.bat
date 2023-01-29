@@ -104,3 +104,7 @@
  -btfldemo^
  -explode^
  -o "out/btfl_demo_font.bmp"^
+
+@REM py fontbuilder.py^
+@REM  -base "resources/fonts/BTFL_ondrascz_color.bmp"^
+@REM  -btfldemo

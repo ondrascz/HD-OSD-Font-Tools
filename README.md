@@ -6,6 +6,11 @@ A tool for building and manipulating the HD OSD fonts for HDZERO VRXs and goggle
   - [Usage](#usage)
   - [Command line options and values](#command-line-options-and-values)
     - [Option `-base`](#option--base)
+    - [Option `-btflcharacters`](#option--btflcharacters)
+    - [Option `-btflspecials`](#option--btflspecials)
+    - [Option `-btflnumbers`](#option--btflnumbers)
+    - [Option `-btflletters`](#option--btflletters)
+    - [Option `-btfllowletters`](#option--btfllowletters)
   - [Option values](#option-values)
     - [Values for bitmaps](#values-for-bitmaps)
     - [Values for .ttf files](#values-for-ttf-files)
@@ -65,6 +70,57 @@ Each option sets the source of the font to be built. The options are processed i
   - mcm
   - ttf
 
+### Option `-btflcharacters`
+
+- loads all BTFL characters glyphs from the source file
+- valid file formats
+  - png
+  - bmp
+  - mcm
+  - ttf
+
+![](docs/btfl_characters.bmp)
+
+### Option `-btflspecials`
+
+- loads BTFL special characters glyphs from the source file
+- valid file formats
+  - png
+  - bmp
+  - mcm
+  - ttf
+
+![](docs/btfl_specials.bmp)
+
+### Option `-btflnumbers`
+
+- loads BTFL numbers glyphs from the source file
+- valid file formats
+  - png
+  - bmp
+  - mcm
+  - ttf
+
+![](docs/btfl_numbers.bmp)
+
+### Option `-btflletters`
+
+- loads BTFL letters glyphs from the source file
+- valid file formats
+  - png
+  - bmp
+  - mcm
+  - ttf
+
+![](docs/btfl_letters.bmp)
+
+### Option `-btfllowletters`
+
+- loads BTFL letters glyphs from the source file
+- valid file formats
+  - ttf
+
+![](docs/btfl_lowletters.bmp)
 
 ## Option values
 
