@@ -271,21 +271,21 @@ def main():
         # print OSD elements
         
         # BTFL mini logo
-        print_glyph( string_to_ord_list("[\]^_ MINILOGO") , target_surf , screen , (1,1) )
+        print_glyph( string_to_ord_list("[\]^_ AIR") , target_surf , screen , (1,1) )
         
         # BTFL logo
-        print_glyph( string_to_ord_list("BTFL LOGO:") , target_surf , screen , (22,4) )
+        # print_glyph( string_to_ord_list("BTFL LOGO:") , target_surf , screen , (22,4) )
         print_glyph( [*range(160,184)] , target_surf , screen , (15,5) )
         print_glyph( [*range(184,208)] , target_surf , screen , (15,6) )
         print_glyph( [*range(208,232)] , target_surf , screen , (15,7) )
         print_glyph( [*range(232,256)] , target_surf , screen , (15,8) )
 
         # INAV logo
-        print_glyph( string_to_ord_list("INAV6 LOGO:") , target_surf , screen , (22,9) )
-        print_glyph( [*range(257,267)] , target_surf , screen , (22,10) )
-        print_glyph( [*range(267,277)] , target_surf , screen , (22,11) )
-        print_glyph( [*range(277,287)] , target_surf , screen , (22,12) )
-        print_glyph( [*range(287,297)] , target_surf , screen , (22,13) )
+        # print_glyph( string_to_ord_list("INAV6 LOGO:") , target_surf , screen , (22,9) )
+        # print_glyph( [*range(257,267)] , target_surf , screen , (22,10) )
+        # print_glyph( [*range(267,277)] , target_surf , screen , (22,11) )
+        # print_glyph( [*range(277,287)] , target_surf , screen , (22,12) )
+        # print_glyph( [*range(287,297)] , target_surf , screen , (22,13) )
 
         # compass
         print_glyph( (24, 29 , 28 , 29 , 26 , 29 , 28 ,  ) , target_surf , screen , (22,1) )
@@ -297,20 +297,34 @@ def main():
         print_glyph( string_to_ord_list("13.0169579") , target_surf , screen , (41,2) )
 
         # home
-        print_glyph( [98,17] , target_surf , screen , (22,3 ))
-        print_glyph( string_to_ord_list("2.46" + chr(125)) , target_surf , screen , (24,3) )
+        print_glyph( [98,32,17] , target_surf , screen , (22,3 ))
+        print_glyph( string_to_ord_list("2.46" + chr(125)) , target_surf , screen , (25,3) )
 
+        
+        # odo
+        print_glyph( string_to_ord_list(chr(113) + "876" + chr(12)) , target_surf , screen , (4,16) )
+        # current
+        print_glyph( string_to_ord_list("12.44" + chr(154)) , target_surf , screen , (3,17) )
+        # capacity
+        print_glyph( string_to_ord_list("965" + chr(7)) , target_surf , screen , (5,18) )
+        
         # voltage
-        print_glyph( string_to_ord_list(chr(149) + "3.81" + chr(6)) , target_surf , screen , (20,18) )
+        print_glyph( string_to_ord_list(chr(149) + "3.81" + chr(6)) , target_surf , screen , (15,18) )
 
         # fly time
-        print_glyph( string_to_ord_list(chr(156) + "12:35") , target_surf , screen , (30,18) )
+        print_glyph( string_to_ord_list(chr(156) + "12:35") , target_surf , screen , (25,18) )
 
         # speed
-        print_glyph( string_to_ord_list(chr(112) + "94" + chr(158)) , target_surf , screen , (40,18) )
+        print_glyph( string_to_ord_list(chr(112) + "94" + chr(158)) , target_surf , screen , (35,18) )
 
-        # capacity
-        print_glyph( string_to_ord_list("965" + chr(7)) , target_surf , screen , (10,18) )
+        # rssi
+        print_glyph( string_to_ord_list(chr(1) + "-85") , target_surf , screen , (45,17) )
+        # lq
+        print_glyph( string_to_ord_list(chr(123) + "2:100") , target_surf , screen , (45,18) )
+
+        
+
+        
         
 
 

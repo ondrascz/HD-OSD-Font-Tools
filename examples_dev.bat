@@ -97,10 +97,10 @@
  py fontbuilder.py^
  -base "resources/fonts/BTFL_ondrascz_color.bmp"^
  -btfllowletters "resources/ttf/DaysOne-Regular.ttf" 25 1.2 1 ^
- -btflnumbers "resources/ttf/a4speed.ttf" 22 1.4 1.7 -0.5 4.5 0.1 0.1 #AADDFF^
+ -btflnumbers "resources/ttf/a4speed.ttf" 22 1.4 1.7 -0.5 4.5 0.1 0.1 #FFFF44^
  -btfllogo "resources/logos/BTFL_hdzero.png"^
  -btflminilogo "resources/logos/BTFL_ondras.png"^
- -inavlogo "resources/fonts/INAV6_gjs_visionplus_v1.0.0.bmp"^
+ -inavlogo "resources/logos/INAV6.png"^
  -btfldemo^
  -explode^
  -o "out/btfl_demo_font.bmp"^
