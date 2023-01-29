@@ -340,7 +340,7 @@ Values:
   - a HEX color value with leading '#'
   - default value: #000000 (black)
 
-Exapmple:
+Example:
 
 ```
 fontbuilder.exe^
