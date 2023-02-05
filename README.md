@@ -245,7 +245,7 @@ Each option creates the source of the font to be built. One or more sources are 
 ### Option `-btflminilogo`
 
 - loads generic bitmap the source file
-- the bitmap is scalled and renders to glyphs `[\\]^_`
+- the bitmap is scalled and renders to glyphs `[\]^_`
 - use as a craft name or pilot name to display in OSD
 - valid file formats
   - png
