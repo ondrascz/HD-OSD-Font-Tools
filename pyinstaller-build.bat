@@ -1,0 +1,1 @@
+pyinstaller --onefile fontbuilder.py
